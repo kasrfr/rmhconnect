@@ -1,4 +1,4 @@
-giimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:rmhconnect/Login.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -21,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: Logo(height: 350),
                   ),
                   Text("RMHC CONNECT", style: mytext),
@@ -30,13 +30,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 20,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 130.0),
                     child: SizedBox(
 
                       width: double.infinity,
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/login_screen');
+                          Navigator.pushNamed(context, '/home');
                         },
                         child: Text("Login"),
                       )
@@ -44,12 +44,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 130.0),
                     child: SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/signup_screen');
+                            Navigator.pushNamed(context, '/signup');
                           },
                           child: Text("Signup"),
                         )
