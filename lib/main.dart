@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/loginpage.dart';
 import 'package:rmhconnect/Welcome.dart';
+import 'package:rmhconnect/Home.dart';
 
 Future<void> main() async{
   runApp(const MyApp());
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/'/*name here before '*/: (context) => SplashScreen(),
-        '/welcome': (context) => WelcomeScreen()
+        '/welcome': (context) => WelcomeScreen(),
+        '/home': (context) => HomePage(),
       }
     );
   }

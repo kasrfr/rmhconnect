@@ -36,7 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: double.infinity,
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/login');
+                          Navigator.pushNamed(context, '/home');
                         },
                         child: Text("Login"),
                       )
