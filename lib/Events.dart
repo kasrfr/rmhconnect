@@ -16,6 +16,7 @@ class Events extends StatelessWidget {
         children: [
           SizedBox(height:25),
           Card(
+            clipBehavior: Clip.antiAlias,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),

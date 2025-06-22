@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:rmhconnect/Welcome.dart';
-import 'package:rmhconnect/screens/logo.dart';
+import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/varries.dart';
+import 'package:flutter/material.dart';
+import 'package:rmhconnect/Events.dart';
+import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/screens/logo.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -36,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       width: double.infinity,
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamed(context, '/login');
                         },
                         child: Text("Login"),
                       )
