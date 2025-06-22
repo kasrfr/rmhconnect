@@ -126,9 +126,7 @@ class _HomePageState extends State<HomePage> {
           if (index == 2) {
             Navigator.pushNamed(context, '/welcome');
           }
-          else if(index == 1){
 
-          }
           else {
             setState(() {
               selectedIndex = index;
