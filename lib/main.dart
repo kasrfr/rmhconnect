@@ -32,30 +32,11 @@ class MyApp extends StatelessWidget {
       routes: {
         '/'/*name here before '*/: (context) => SplashScreen(),
         '/welcome': (context) => WelcomeScreen(),
+        '/login_screen': (context) => LoginPage(),
         '/signup_screen': (context) => SignupPage(),
         '/admin_home': (context) => AdminHome(),
-        '/navigation_page': (context) => NavigationPage()
+        '/navigation_screen': (context) => NavigationPage()
       }
     );
   }
 }
-
-/*
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: const Placeholder(),
-    );
-  }
-}
-*/
