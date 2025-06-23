@@ -1,10 +1,10 @@
 import 'package:rmhconnect/constants.dart';
-import 'package:rmhconnect/varries.dart';
+import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/Events.dart';
+import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
-import 'package:rmhconnect/Profile.dart';
+import 'package:rmhconnect/screens/Profile.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final int selectedIndex;
@@ -40,7 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 20,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 130.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: SizedBox(
 
                       width: double.infinity,
@@ -54,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 130.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
@@ -69,6 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
         ),
+      /*
       bottomNavigationBar: BottomNavigationBar(
       currentIndex: selectedIndex,
       onTap: (index) {
@@ -88,6 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
       ],
     ),
+      */
     );
   }
 }

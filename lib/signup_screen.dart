@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'constants.dart';
 
 class SignupPage extends StatefulWidget {
@@ -125,8 +124,9 @@ class _SignupPageState extends State<SignupPage> {
                           Navigator.pushReplacementNamed(context, '/navigation_screen');//'/navigation_page');
                         }
                       }
-                      catch(e) {
-                        print("Issue occurred");
+                      catch(e, stackTrace) {
+                        print("Error: $e");
+                        print("Stack Trace: $stackTrace");
                       }
                     }
                   },

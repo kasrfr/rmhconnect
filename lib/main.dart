@@ -1,13 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/Login.dart';
 import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/Welcome.dart';
-import 'package:rmhconnect/Home.dart';
-import 'package:rmhconnect/Profile.dart';
-import 'package:rmhconnect/Directory.dart';
-import 'package:rmhconnect/SignupPage.dart';
+import 'package:rmhconnect/screens/Home.dart';
+import 'package:rmhconnect/screens/Profile.dart';
+import 'package:rmhconnect/screens/admins/admin_home.dart';
+import 'package:rmhconnect/screens/residents/navigation_page.dart';
+import 'package:rmhconnect/signup_screen.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -28,30 +35,11 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/home': (context) => HomePage(),
         '/profile': (context) => Profile(),
-        '/directory': (context) => Directory(),
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupPage(),
+        '/navigation_screen': (context) => NavigationPage(),
+        '/admin_home': (context) => AdminHome()
       }
     );
   }
 }
-
-/*
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: const Placeholder(),
-    );
-  }
-}
-*/

@@ -1,11 +1,11 @@
 import 'package:rmhconnect/constants.dart';
-import 'package:rmhconnect/varries.dart';
+import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/Events.dart';
+import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
-import 'package:rmhconnect/Profile.dart';
-import 'package:rmhconnect/ProfilePhoto.dart';
+import 'package:rmhconnect/screens/Profile.dart';
+import 'package:rmhconnect/screens/ProfilePhoto.dart';
 import 'package:flutter/gestures.dart';
 
 class Profile extends StatefulWidget {

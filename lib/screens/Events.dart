@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/varries.dart';
+import 'package:rmhconnect/constants.dart';
 
 class Events extends StatelessWidget {
   final String evname;
