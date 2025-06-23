@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
 
-      initialRoute: '/',
+      initialRoute: '/signup_screen', //'/',
       routes: {
         '/'/*name here before '*/: (context) => SplashScreen(),
         '/welcome': (context) => WelcomeScreen(),
