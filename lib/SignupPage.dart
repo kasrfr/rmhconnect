@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rmhconnect/varries.dart';
 
 import 'constants.dart';
 
@@ -93,7 +94,10 @@ class _SignupPageState extends State<SignupPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print('Valid!');
+                          email = _emailController.text;
+                          password = _passwordController.text;
+                          signIn = true;
+                          Navigator.pushNamed(context, '/profile');
                         }
                       },
                       style: ElevatedButton.styleFrom(
