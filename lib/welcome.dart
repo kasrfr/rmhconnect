@@ -73,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       currentIndex: selectedIndex,
       onTap: (index) {
         if(index == 0){
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushNamed(context, '/signup');
         }
         else {
           setState(() {

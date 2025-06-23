@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/Login.dart';
+import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/varries.dart';
+import 'package:flutter/material.dart';
+import 'package:rmhconnect/Events.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,7 +16,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Text("yay", style: TextStyle(fontSize: 20))
+        appBar: AppBar(
+            title: const Text('Login'),
+            backgroundColor: backgroundColor
+        )
     );
   }
 }

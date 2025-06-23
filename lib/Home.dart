@@ -81,84 +81,51 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-      child: ListView(
+      appBar: AppBar(
+          backgroundColor: backgroundColor,
+          title: Text("RMHC CONNECT", style: titling),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,30,0),
+              child: Icon(Icons.notifications, color: Colors.white, size: 38),
+            ),
+          ]
+      ),
+      body: ListView(
       children: [
         Container(
-          height: 80,
-          color: Colors.red,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("RMHC CONNECT", style: titling),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0,0,20,0),
-                child: Icon(Icons.notifications, color: Colors.white, size: 32),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 10),
-        Text('Upcoming Events', style: titlingblck, textAlign: TextAlign.center),
-        SizedBox(height: 10),
-        Events(
+          height: MediaQuery.of(context).size.height,
+          color : Colors.white,
+          child: Column(
+                children: [
+                    SizedBox(height: 10),
+                    Text('Upcoming Events', style: titlingblck, textAlign: TextAlign.center),
+                    SizedBox(height: 10),
+                    Events(
           evname: "Event A",
           evdescrip: "Details about Event A",
           evtime: "2:00 PM",
           evdate: "June 25, 2025",
         ),
-        Events(
+                    Events(
           evname: "Event B",
           evdescrip: "Details about Event B",
           evtime: "4:30 PM",
           evdate: "June 30, 2025",
         ),
-        Events(
+                    Events(
           evname: "Event A",
           evdescrip: "Details about Event A",
           evtime: "2:00 PM",
           evdate: "June 25, 2025",
         ),
-        Events(
-          evname: "Event A",
-          evdescrip: "Details about Event A",
-          evtime: "2:00 PM",
-          evdate: "June 25, 2025",
-        ),
-        Events(
-          evname: "Event B",
-          evdescrip: "Details about Event B",
-          evtime: "4:30 PM",
-          evdate: "June 30, 2025",
-        ),
-        Events(
-          evname: "Event A",
-          evdescrip: "Details about Event A",
-          evtime: "2:00 PM",
-          evdate: "June 25, 2025",
-        ),
-        Events(
-          evname: "Event A",
-          evdescrip: "Details about Event A",
-          evtime: "2:00 PM",
-          evdate: "June 25, 2025",
-        ),
-        Events(
-          evname: "Event B",
-          evdescrip: "Details about Event B",
-          evtime: "4:30 PM",
-          evdate: "June 30, 2025",
-        ),
-        Events(
-          evname: "Event A",
-          evdescrip: "Details about Event A",
-          evtime: "2:00 PM",
-          evdate: "June 25, 2025",
-        ),
+                ]
+          )
+        )
       ]
-      )
-    ),
-      backgroundColor : Colors.white,
+      ),
+      backgroundColor : backgroundColor,
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
