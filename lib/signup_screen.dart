@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'constants.dart';
 
 class SignupPage extends StatefulWidget {
@@ -12,7 +14,9 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
 
   final _formKey = GlobalKey<FormState>();
-  
+  String email = '';
+  String password = '';
+  String? role = '';
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -60,7 +64,9 @@ class _SignupPageState extends State<SignupPage> {
                   }
                   return null;
                 },
+                onChanged: (val) => setState(() => email = val)
               ),
+
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
@@ -86,13 +92,42 @@ class _SignupPageState extends State<SignupPage> {
                   }
                   return null;
                 },
+                  onChanged: (val) => setState(() => password = val)
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print('Valid!');
+                      try{
+                        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
+                        final roleDoc = await FirebaseFirestore.instance
+                          .collection('admins')
+                          .where('email', isEqualTo: email)
+                          .limit(1)
+                          .get();
+                        role = (roleDoc.docs.isNotEmpty) ? 'admin': 'patient';
+                        await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(credential.user!.uid)
+                          .set({
+                            'email': email,
+                            'role': role,
+                          });
+                        if (role == 'admin') {
+                          Navigator.pushReplacementNamed(context, '/admin_home');
+                        }
+                        else {
+                          Navigator.pushReplacementNamed(context, '/navigation_screen');//'/navigation_page');
+                        }
+                      }
+                      catch(e, stackTrace) {
+                        print("Error: $e");
+                        print("Stack Trace: $stackTrace");
+                      }
                     }
                   },
                 style: ElevatedButton.styleFrom(
