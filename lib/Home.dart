@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
+import 'package:rmhconnect/Profile.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -29,43 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget _getBody() {
     switch (selectedIndex) {
       case 0:
-        return ListView(
-          children: [
-            Container(
-              height: 80,
-              color: Colors.red,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("RMHC CONNECT", style: titling),
-                  SizedBox(width: 10),
-                  Icon(Icons.notifications, color: Colors.white, size: 32),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            Text('Upcoming Events', style: titlingblck, textAlign: TextAlign.center),
-            SizedBox(height: 10),
-            Events(
-              evname: "Event A",
-              evdescrip: "Details about Event A",
-              evtime: "2:00 PM",
-              evdate: "June 25, 2025",
-            ),
-            Events(
-              evname: "Event B",
-              evdescrip: "Details about Event B",
-              evtime: "4:30 PM",
-              evdate: "June 30, 2025",
-            ),
-            Events(
-              evname: "Event A",
-              evdescrip: "Details about Event A",
-              evtime: "2:00 PM",
-              evdate: "June 25, 2025",
-            ),
-          ],
-        );
+
       case 1:
         return Center(
           child: Text('Announcement Page Content', style: titlingblck),
@@ -116,17 +81,94 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor : Colors.white,
       body: SafeArea(
-      child: _getBody()
-      ),
+      child: ListView(
+      children: [
+        Container(
+          height: 80,
+          color: Colors.red,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("RMHC CONNECT", style: titling),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30.0,0,20,0),
+                child: Icon(Icons.notifications, color: Colors.white, size: 32),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 10),
+        Text('Upcoming Events', style: titlingblck, textAlign: TextAlign.center),
+        SizedBox(height: 10),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+        Events(
+          evname: "Event B",
+          evdescrip: "Details about Event B",
+          evtime: "4:30 PM",
+          evdate: "June 30, 2025",
+        ),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+        Events(
+          evname: "Event B",
+          evdescrip: "Details about Event B",
+          evtime: "4:30 PM",
+          evdate: "June 30, 2025",
+        ),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+        Events(
+          evname: "Event B",
+          evdescrip: "Details about Event B",
+          evtime: "4:30 PM",
+          evdate: "June 30, 2025",
+        ),
+        Events(
+          evname: "Event A",
+          evdescrip: "Details about Event A",
+          evtime: "2:00 PM",
+          evdate: "June 25, 2025",
+        ),
+      ]
+      )
+    ),
+      backgroundColor : Colors.white,
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
-          if (index == 2) {
+          if (index == 2 && signIn == false) {
             Navigator.pushNamed(context, '/welcome');
           }
-
+          else if (index == 2 && signIn == true) {
+            Navigator.pushNamed(context, '/profile');
+          }
           else {
             setState(() {
               selectedIndex = index;
