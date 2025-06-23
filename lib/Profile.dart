@@ -29,37 +29,34 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: backgroundColor,
+          title: Text("My Profile", style: titling),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,30,0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFE37575)
+                      )
+                  ),
+                  Icon(Icons.person, color: Color(0xFFFFDEDE), size: 40),
+                ],
+              ),
+            ),
+          ]
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-            Container(
-              height: 80,
-              color: Colors.red,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("MY PROFILE", style: titling),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40.0,0,0,0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                        children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFE37575)
-                          )
-                        ),
-                        Icon(Icons.person, color: Color(0xFFFFDEDE), size: 40),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
             SizedBox(height: 40),
             Profilephoto(pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill"),
             Padding(
