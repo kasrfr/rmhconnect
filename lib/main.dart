@@ -3,6 +3,8 @@ import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/loginpage.dart';
 import 'package:rmhconnect/Welcome.dart';
 import 'package:rmhconnect/Home.dart';
+import 'package:rmhconnect/Profile.dart';
+import 'package:rmhconnect/Directory.dart';
 
 Future<void> main() async{
   runApp(const MyApp());
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
         '/'/*name here before '*/: (context) => SplashScreen(),
         '/welcome': (context) => WelcomeScreen(),
         '/home': (context) => HomePage(),
+        '/profile': (context) => Profile(),
+        '/directory': (context) => Directory(),
       }
     );
   }
