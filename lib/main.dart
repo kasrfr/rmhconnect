@@ -6,6 +6,7 @@ import 'package:rmhconnect/Home.dart';
 import 'package:rmhconnect/Profile.dart';
 import 'package:rmhconnect/Directory.dart';
 import 'package:rmhconnect/SignupPage.dart';
+import 'package:rmhconnect/Announcements.dart';
 
 Future<void> main() async{
   runApp(const MyApp());
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/directory': (context) => Directory(),
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupPage(),
+        '/announcements': (context) => Announcements(),
       }
     );
   }

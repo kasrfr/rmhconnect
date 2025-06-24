@@ -26,57 +26,6 @@ class _HomePageState extends State<HomePage> {
     selectedIndex = widget.selectedIndex; // get the starting index
   }
 
-  @override
-  Widget _getBody() {
-    switch (selectedIndex) {
-      case 0:
-
-      case 1:
-        return Center(
-          child: Text('Announcement Page Content', style: titlingblck),
-        );
-      case 2:
-        return Scaffold(
-            backgroundColor: backgroundColor,
-            body:
-            SafeArea(
-                child: Center(
-                  child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 75),
-                          child: Text(
-                              "Ronald McDonald",
-                              softWrap: true,
-                              style: titleStyley
-                          ),
-                        ),
-                        Text(
-                            "House Charities",
-                            softWrap: true,
-                            style: titleStyley
-                        ),
-                        Logo(height: 350),
-                        Spacer(flex: 1),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 0),
-                          child: Text(
-                              "Version 1.0.0",
-                              style: versionStyley
-                          ),
-                        ),
-                      ]
-                  ),
-                )
-            )
-        );
-      default:
-        return Center(
-          child: Text('Unknown Page Error', style: titlingblck),
-        );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0,0,30,0),
-              child: Icon(Icons.notifications, color: Colors.white, size: 38),
+              child: Icon(Icons.notifications_outlined, color: Colors.white, size: 38),
             ),
           ]
       ),
@@ -135,6 +84,9 @@ class _HomePageState extends State<HomePage> {
           }
           else if (index == 2 && signIn == true) {
             Navigator.pushNamed(context, '/profile');
+          }
+          if (index == 1) {
+            Navigator.pushNamed(context, '/announcements');
           }
           else {
             setState(() {

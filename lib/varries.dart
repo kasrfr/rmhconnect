@@ -13,5 +13,7 @@ late String role = "role";
 late String password = "password";
 late String email = "email";
 late String location = "location";
+late String mebranch = "Springfield, Charlestown";
+late bool notifs = true;
 
 
