@@ -121,7 +121,7 @@ class _SignupPageState extends State<SignupPage> {
                           Navigator.pushReplacementNamed(context, '/admin_home');
                         }
                         else {
-                          Navigator.pushReplacementNamed(context, '/navigation_screen');//'/navigation_page');
+                          Navigator.pushReplacementNamed(context, '/Home');//'/navigation_page');
                         }
                       }
                       catch(e, stackTrace) {

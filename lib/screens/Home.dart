@@ -5,6 +5,7 @@ import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/Profile.dart';
+import 'package:rmhconnect/screens/residents/residents_home.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -36,41 +37,7 @@ class _HomePageState extends State<HomePage> {
           child: Text('Announcement Page Content', style: titlingblck),
         );
       case 2:
-        return Scaffold(
-            backgroundColor: backgroundColor,
-            body:
-            SafeArea(
-                child: Center(
-                  child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 75),
-                          child: Text(
-                              "Ronald McDonald",
-                              softWrap: true,
-                              style: titleStyley
-                          ),
-                        ),
-                        Text(
-                            "House Charities",
-                            softWrap: true,
-                            style: titleStyley
-                        ),
-                        Logo(height: 350),
-                        Spacer(flex: 1),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 0),
-                          child: Text(
-                              "Version 1.0.0",
-                              style: versionStyley
-                          ),
-                        ),
-                      ]
-                  ),
-                )
-            )
-        );
+        return ResidentsHome();
       default:
         return Center(
           child: Text('Unknown Page Error', style: titlingblck),
