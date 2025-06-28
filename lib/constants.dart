@@ -14,5 +14,9 @@ late String role = "role";
 late String password = "password";
 late String email = "email";
 late String location = "location";
+late String nbname = "branch name";
+late String nbloc = "branch location";
+late String nenme;
+late String nedscrp;
 
 
