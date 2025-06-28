@@ -25,8 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void>// may not be loaded yet but when it is this is the type that will be returned/dealing with something that hasn't been built yet
                init() async{
-    await Future.delayed(const Duration(seconds: 5));
-    Navigator.pushReplacementNamed(context, '/welcome');
+    await Future.delayed(const Duration(seconds: 1)); //5));
+    Navigator.pushReplacementNamed(context, '/profile'); // '/welcome');
   }
 
   @override
