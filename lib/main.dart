@@ -9,6 +9,7 @@ import 'package:rmhconnect/screens/admins/admin_home.dart';
 import 'package:rmhconnect/screens/residents/navigation_page.dart';
 import 'package:rmhconnect/signup_screen.dart';
 import 'firebase_options.dart';
+import 'package:rmhconnect/screens/admins/adminbranches.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupPage(),
         '/navigation_screen': (context) => NavigationPage(),
-        '/admin_home': (context) => AdminHome()
+        '/admin_home': (context) => AdminHome(),
+        '/admin_branch': (context) => Adminbranches(),
       }
     );
   }
