@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/Login.dart';
 import 'package:rmhconnect/SplashScreen.dart';
+import 'package:rmhconnect/Welcome.dart';
 import 'package:rmhconnect/screens/Home.dart';
 import 'package:rmhconnect/screens/Profile.dart';
 import 'package:rmhconnect/screens/admins/admin_home.dart';
@@ -34,13 +35,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
 
-      initialRoute: '/',
+      initialRoute: '/signup_screen', //'/',
       routes: {
-        '/': (context) => SplashScreen(),
-        '/welcome': (context) => WelcomePage(),
-        '/login': (context) => LoginPage(),
+        '/'/*name here before '*/: (context) => SplashScreen(),
+        '/welcome': (context) => WelcomeScreen(),
+        '/home': (context) => HomePage(),
+        '/profile': (context) => Profile(),
+        '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupPage(),
-        '/home': (context) => ResidentsHome(),
         '/navigation_screen': (context) => NavigationPage(),
         '/announcements': (context) => AnnouncementsPage(),
         '/profile': (context) => ProfilePage(),

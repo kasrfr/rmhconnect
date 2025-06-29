@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final TextStyle versionStyle = TextStyle(
-    color: Colors.white.withValues(alpha: 0.5),
+    color: Colors.white.withOpacity(0.5),
     fontSize: 32
   );
   final TextStyle titleStyle = TextStyle(
