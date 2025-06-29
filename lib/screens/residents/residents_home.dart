@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rmhconnect/constants.dart';
 
 class ResidentsHome extends StatefulWidget {
   const ResidentsHome({super.key});
@@ -17,6 +18,18 @@ class _ResidentsHomeState extends State<ResidentsHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: backgroundColor,
+          automaticallyImplyLeading: false,
+          title: Text("RMHC CONNECT", style: titling),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,30,0),
+              child: Icon(Icons.notifications, color: Colors.white, size: 38),
+            ),
+          ]
+      ),
       body: SingleChildScrollView(
         child: Column(
           children:[

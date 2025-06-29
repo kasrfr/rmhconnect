@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/screens/logo.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
 

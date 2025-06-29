@@ -6,14 +6,14 @@ import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/Profile.dart';
 
-class adminnav extends StatefulWidget {
-  const adminnav({super.key});
+class AdminNavigation extends StatefulWidget {
+  const AdminNavigation({super.key});
 
   @override
-  State<adminnav> createState() => _adminnavState();
+  State<AdminNavigation> createState() => _AdminNavigationState();
 }
 
-class _adminnavState extends State<adminnav> {
+class _AdminNavigationState extends State<AdminNavigation> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();

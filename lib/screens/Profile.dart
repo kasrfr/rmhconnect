@@ -57,75 +57,26 @@ class _ProfileState extends State<Profile> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-            SizedBox(height: 40),
-            Profilephoto(pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill"),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0,8,0,0),
-              child: Text(username, style: mytextmed),
-            ),
-            Text(role, style: mytextnormal),
-            Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-            Text(location, style: mytextnormal),
-            SizedBox(height: 30),
-            GestureDetector(
-              onTap: (){
-                Navigator.pushNamed(context, '/directory');
-              },
-              child: Text("Branch Directory", style: TextStyle(fontSize:24, color: Colors.blue, fontWeight: FontWeight.bold)),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
-              child: Text("My Events", style: titlingblck),
-            ),
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-                Events(
-                  evname: "Event A",
-                  evdescrip: "Details about Event A",
-                  evtime: "2:00 PM",
-                  evdate: "June 25, 2025",
-                ),
-
-              ]
-            )
+              SizedBox(height: 40),
+              Profilephoto(pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill"),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                child: Text(username, style: mytextmed),
+              ),
+              Text(role, style: mytextnormal),
+              Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
+              Text(location, style: mytextnormal),
+              SizedBox(height: 30),
+              GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context, '/directory');
+                },
+                child: Text("Branch Directory", style: TextStyle(fontSize:24, color: Colors.blue, fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
+                child: Text("My Events", style: titlingblck),
+              ),
             ]
           )
         ),
