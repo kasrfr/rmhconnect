@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
-import 'package:rmhconnect/screens/Profile.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class WelcomePage extends StatefulWidget {
   final int selectedIndex;
-  const WelcomeScreen({super.key, this.selectedIndex = 2});
+  const WelcomePage({super.key, this.selectedIndex = 2});
 
   @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
+  State<WelcomePage> createState() => _WelcomePageState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomePageState extends State<WelcomePage> {
   late int selectedIndex;
 
   @override

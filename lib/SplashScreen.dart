@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/constants.dart';
@@ -23,10 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
     init();
   }
 
-  Future<void>// may not be loaded yet but when it is this is the type that will be returned/dealing with something that hasn't been built yet
-               init() async{
+  Future<void> init() async{
     await Future.delayed(const Duration(seconds: 5));
     //Navigator.pushReplacementNamed(context, '/welcome');
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc =
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      final role = userDoc.data()?['role'] ?? 'patient';
+      if (role == 'admin') {
+        Navigator.pushReplacementNamed(context, '/admin_navigation');
+      } else {
+        Navigator.pushReplacementNamed(context, '/navigation_screen');
+      }
+    } else {
+      Navigator.pushReplacementNamed(context, '/welcome');
+    }
   }
 
   @override
