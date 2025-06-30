@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
-import 'package:rmhconnect/screens/Profile.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
 import 'package:rmhconnect/screens/residents/residents_home.dart';
 

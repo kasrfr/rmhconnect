@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/Login.dart';
 import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/screens/Home.dart';
-import 'package:rmhconnect/screens/Profile.dart';
 import 'package:rmhconnect/screens/admins/admin_home.dart';
 import 'package:rmhconnect/screens/admins/adminnav.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
 
-      initialRoute: '/signup_screen', //'/',
+      initialRoute: '/',
       routes: {
         '/'/*name here before '*/: (context) => SplashScreen(),
         '/welcome': (context) => WelcomePage(),
