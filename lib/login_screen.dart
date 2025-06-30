@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/Login.dart';
+import 'package:rmhconnect/login_screen.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  String email = '';
+  String password = '';
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
@@ -51,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
+                    onChanged: (val) => setState(() => email = val)
                   ),
                 ),
                 Padding(
@@ -67,15 +71,29 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
+                    onChanged: (val) => setState(() => password = val)
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (email == _emailController.text && password == _passwordController.text) {
-                        signIn = true;
-                        Navigator.pushNamed(context, '/profile');
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          );
+                          final userDoc = await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get();
+                          final role = userDoc.data()?['role'] ?? 'patient';
+                          if (role == 'admin') {
+                            Navigator.pushReplacementNamed(context, '/admin_navigation');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/navigation_screen');
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(

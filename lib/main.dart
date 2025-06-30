@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/Login.dart';
+import 'package:rmhconnect/login_screen.dart';
 import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/screens/Home.dart';
 import 'package:rmhconnect/screens/admins/admin_home.dart';

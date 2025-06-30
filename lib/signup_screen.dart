@@ -92,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
                   }
                   return null;
                 },
-                  onChanged: (val) => setState(() => password = val)
+                onChanged: (val) => setState(() => password = val)
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
