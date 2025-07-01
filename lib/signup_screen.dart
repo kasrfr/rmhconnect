@@ -17,9 +17,30 @@ class _SignupPageState extends State<SignupPage> {
   String email = '';
   String password = '';
   String? role = '';
+  List<String> orgNames = [];
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  @override
+  void initState(){
+    super.initState();
+    loadOrgNames();
+  }
+
+  Future<void> loadOrgNames() async {
+    final snapshot =
+    await FirebaseFirestore.instance.collection('organizations').get();
+    final names = snapshot.docs
+        .map((doc) => doc.data()['name'] as String?)
+        .whereType<String>()
+        .toList();
+
+    setState(() {
+      orgNames = names;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +115,9 @@ class _SignupPageState extends State<SignupPage> {
                 },
                 onChanged: (val) => setState(() => password = val)
               ),
+
+              // Todo: Add dropdownsearch item here [https://pub.dev/packages/dropdown_search]
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: ElevatedButton(
