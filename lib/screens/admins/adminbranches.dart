@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
@@ -82,26 +83,56 @@ class _AdminbranchesState extends State<Adminbranches> {
           child: Icon(Icons.add),
       ),
       body: Center(
-        child: GestureDetector(
-          onTap: (){
-            Navigator.pushNamed(context, '/branch details');
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Card(//modi// fy to match figma
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              color: Color(0xFFFFDEDE),
-              child: ListTile(
-                leading: Icon(Icons.home, color: Colors.red),
-                title: Text(nbname, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                subtitle: Text(nbloc, style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
-              )
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('organizations').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text("No organizations found."));
+              }
+
+              final orgDocs = snapshot.data!.docs;
+
+              return ListView.builder(
+                itemCount: orgDocs.length,
+                itemBuilder: (context, index) {
+                  final data = orgDocs[index].data() as Map<String, dynamic>;
+                  final String nbname = data['name'] ?? 'Unknown Name';
+                  final String nbloc = data['location'] ?? 'Unknown Location';
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/admin_branch_details',
+                        arguments: {
+                          'name': nbname,
+                          'location': nbloc,
+                        },
+                      );
+                    },
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      color: const Color(0xFFFFDEDE),
+                      child: ListTile(
+                        leading: const Icon(Icons.home, color: Colors.red),
+                        title: Text(nbname, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                        subtitle: Text(nbloc, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
-        ),
+        )
       )
     );
   }
