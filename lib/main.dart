@@ -1,14 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/Login.dart';
+import 'package:rmhconnect/login_screen.dart';
 import 'package:rmhconnect/SplashScreen.dart';
 import 'package:rmhconnect/screens/Home.dart';
+import 'package:rmhconnect/screens/admins/admin_branch_deatils_screen.dart';
 import 'package:rmhconnect/screens/admins/admin_home.dart';
-import 'package:rmhconnect/screens/admins/adminnav.dart';
+import 'package:rmhconnect/screens/admins/admin_navigation.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
 import 'package:rmhconnect/screens/residents/navigation_page.dart';
 import 'package:rmhconnect/screens/residents/profile_page.dart';
-import 'package:rmhconnect/screens/residents/residents_home.dart';
 import 'package:rmhconnect/signup_screen.dart';
 import 'package:rmhconnect/welcome.dart';
 import 'firebase_options.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/',
       routes: {
-        '/'/*name here before '*/: (context) => SplashScreen(),
+        '/' /*name here before '*/: (context) => SplashScreen(),
         '/welcome': (context) => WelcomePage(),
         '/home': (context) => HomePage(),
         '/login': (context) => LoginPage(),
@@ -46,7 +46,19 @@ class MyApp extends StatelessWidget {
         '/admin_navigation': (context) => AdminNavigation(),
         '/admin_home': (context) => AdminHome(),
         '/admin_branch': (context) => Adminbranches(),
-      }
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/admin_branch_details') {
+          final args = settings.arguments as Map<String, dynamic>? ?? {};
+          return MaterialPageRoute(
+            builder: (context) => AdminBranchDeatils(
+              name: args['name'] ?? "Unknown Name",
+              location: args['location'] ?? "Unknown Location",
+            ),
+          );
+        }
+        return null;
+      },
     );
   }
 }
