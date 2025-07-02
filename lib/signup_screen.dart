@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -17,10 +18,14 @@ class _SignupPageState extends State<SignupPage> {
   String email = '';
   String password = '';
   String? role = '';
-  List<String> orgNames = [];
+  /* */ List<String> orgNames = []; /* */
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool isLoading = true;
+  String? valueOrg;
+  String name = '';
 
   @override
   void initState(){
@@ -38,6 +43,7 @@ class _SignupPageState extends State<SignupPage> {
 
     setState(() {
       orgNames = names;
+      isLoading = false;
     });
   }
 
@@ -52,9 +58,12 @@ class _SignupPageState extends State<SignupPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),
-          child: Form(
-            key: _formKey,
-            child: Column(
+          child: isLoading ?
+            const CircularProgressIndicator() :
+            Form(
+              key: _formKey,
+              child: Column(
+
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0,horizontal: 30),
@@ -74,7 +83,20 @@ class _SignupPageState extends State<SignupPage> {
                       )
                   ),
                 ),
-        
+                TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                        helperText: 'Name'
+                    ),
+                    validator: (String? name) {
+                      if (name == null || name.isEmpty) {
+                        return 'Please enter a screen name';
+                      }
+                      return null;
+                    },
+                    onChanged: (val) => setState(() => name = val)
+                ),
+
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
@@ -116,9 +138,24 @@ class _SignupPageState extends State<SignupPage> {
                   },
                   onChanged: (val) => setState(() => password = val)
                 ),
-        
+
                 // Todo: Add dropdownsearch item here [https://pub.dev/packages/dropdown_search]
-        
+
+
+                DropdownSearch<String>(
+                items: (f, cs) => orgNames,
+                  popupProps: PopupProps.menu(
+                  fit: FlexFit.loose
+                  ),
+                  selectedItem: valueOrg,
+                  validator: (String? valueOrg) {
+                    if (valueOrg == null || valueOrg.isEmpty) {
+                    return 'Please select your location';
+                    }
+                    return null;
+                    },
+                      onChanged: (val) => setState(() => valueOrg = val)
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: ElevatedButton(
@@ -141,6 +178,8 @@ class _SignupPageState extends State<SignupPage> {
                             .set({
                               'email': email,
                               'role': role,
+                              'location': valueOrg,
+                              'name': name,
                             });
                           if (role == 'admin') {
                             Navigator.pushReplacementNamed(context, '/admin_home');

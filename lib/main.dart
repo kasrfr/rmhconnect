@@ -17,6 +17,7 @@ import 'package:rmhconnect/screens/admins/adminbranches.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    name: 'RMHConnect',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
+        '/signup_screen': (context) => SignupPage(),
         '/navigation_screen': (context) => NavigationPage(),
         '/announcements': (context) => AnnouncementsPage(),
         '/profile': (context) => ProfilePage(),
