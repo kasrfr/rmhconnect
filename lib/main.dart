@@ -13,6 +13,7 @@ import 'package:rmhconnect/signup_screen.dart';
 import 'package:rmhconnect/welcome.dart';
 import 'firebase_options.dart';
 import 'package:rmhconnect/screens/admins/adminbranches.dart';
+import 'package:rmhconnect/screens/admins/admin_members.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/admin_navigation': (context) => AdminNavigation(),
         '/admin_home': (context) => AdminHome(),
         '/admin_branch': (context) => Adminbranches(),
+        '/admin_members': (context) => AdminMembers(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/admin_branch_details') {
