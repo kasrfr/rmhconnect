@@ -64,13 +64,28 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: Icon(Icons.logout),
               title: Text('Logout'),
               onTap: () => Navigator.pop(context, 'logout'),
-            )
+            ),
+            ListTile(
+              leading: Icon(Icons.delete, color: Colors.red),
+              title: Text(
+                'Delete Account',
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () => Navigator.pop(context, 'delete'),
+            ),
           ],
         ),
       ),
     );
     if (action == 'logout') {
       await FirebaseAuth.instance.signOut();
+      if (mounted) Navigator.pushReplacementNamed(context, '/welcome');
+    } else if (action == 'delete') {
+      await user?.delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .delete();
       if (mounted) Navigator.pushReplacementNamed(context, '/welcome');
     }
   }

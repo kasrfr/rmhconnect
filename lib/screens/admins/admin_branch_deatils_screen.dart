@@ -49,48 +49,77 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Card(
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    color: const Color(0xFFFFDEDE),
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.check, color: Colors.red, size: 40),
-                            SizedBox(height: 20),
-                            Text("Announcements", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                          ]
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(
+                      context,
+                      '/admin_announcements',
+                      arguments: {
+                        'orgName': widget.name,
+                      },
+                    );
+                  },
+                  child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
-                    )
+                      color: const Color(0xFFFFDEDE),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.check, color: Colors.red, size: 40),
+                              SizedBox(height: 20),
+                              Text("Announcements", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            ]
+                        ),
+                      )
+                  ),
                 ),
-                Card(
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    color: const Color(0xFFFFDEDE),
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.calendar_month, color: Colors.red, size: 40),
-                            SizedBox(height: 20),
-                            Text("          Events         ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                          ]
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(
+                      context,
+                      '/admin_events',
+                      arguments: {
+                        'orgName': widget.name,
+                      },
+                    );
+                  },
+                  child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
-                    )
+                      color: const Color(0xFFFFDEDE),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.calendar_month, color: Colors.red, size: 40),
+                              SizedBox(height: 20),
+                              Text("          Events         ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            ]
+                        ),
+                      )
+                  ),
                 ),
               ]
             ),
             SizedBox(height: 20),
+            // Members Button
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/admin_members');
+                Navigator.pushNamed(
+                  context,
+                  '/admin_members',
+                  arguments: {
+                    'orgName': widget.name,
+                  },
+                );
               },
               child: Card(
                 clipBehavior: Clip.antiAlias,

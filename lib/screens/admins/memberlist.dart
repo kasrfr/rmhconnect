@@ -8,7 +8,9 @@ import 'package:rmhconnect/screens/logo.dart';
 
 class memberlist extends StatelessWidget {
   final String pfp;
-  const memberlist({super.key , required this.pfp});
+  final String name;
+  final String role;
+  const memberlist({super.key, required this.name, required this.role, required this.pfp});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +31,8 @@ class memberlist extends StatelessWidget {
             SizedBox(width: 15),
             Column(
               children: [
-                Text("Name", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                Text("Role", style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
+                Text(name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(role, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
               ]
             )
           ]
