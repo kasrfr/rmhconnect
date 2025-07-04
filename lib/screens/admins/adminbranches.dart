@@ -17,10 +17,25 @@ class _AdminbranchesState extends State<Adminbranches> {
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController loccontrol = TextEditingController();
 
+  Future<void> addOrganizationBranch(String name, String location) async {
+    try {
+      await FirebaseFirestore.instance.collection('organizations').add({
+        'name': name,
+        'location': location,
+      });
+
+      print('Branch "$name" at "$location" added successfully.');
+    } catch (e) {
+      print('Failed to add branch: $e');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
         title: Text("Branches", style: titling),
         centerTitle: true,
@@ -68,6 +83,7 @@ class _AdminbranchesState extends State<Adminbranches> {
                                 namecontrol.clear();
                                 loccontrol.clear();
                               });
+                              addOrganizationBranch(nbname, nbloc);
                               Navigator.pop(context);
                             },
                             child: Text("Create"),

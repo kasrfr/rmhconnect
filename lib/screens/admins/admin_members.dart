@@ -8,7 +8,8 @@ import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/admins/memberlist.dart';
 
 class AdminMembers extends StatefulWidget {
-  const AdminMembers({super.key});
+  final String orgName;
+  const AdminMembers({super.key, required this.orgName});
 
   @override
   State<AdminMembers> createState() => _AdminMembersState();
@@ -26,14 +27,45 @@ class _AdminMembersState extends State<AdminMembers> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(50,20,50,0),
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              memberlist(pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill"),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .where('location', isEqualTo: widget.orgName)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text("No members found."));
+              }
 
-            ]
+              // Get the list of users
+              final users = snapshot.data!.docs;
+
+              // Sort so 'admin' roles appear first
+              users.sort((a, b) {
+                final roleA = a['role']?.toString().toLowerCase() ?? '';
+                final roleB = b['role']?.toString().toLowerCase() ?? '';
+                if (roleA == 'admin' && roleB != 'admin') return -1;
+                if (roleA != 'admin' && roleB == 'admin') return 1;
+                return 0;
+              });
+
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+                  final name = user['name'] ?? 'Unknown';
+                  final role = user['role'] ?? 'Member';
+                  return memberlist(name: name, role: role, pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill");
+                },
+              );
+            },
           ),
-        )
+
+        ),
       )
     );
   }
