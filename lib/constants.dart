@@ -18,5 +18,8 @@ late String nbname = "branch name";
 late String nbloc = "branch location";
 late String nenme;
 late String nedscrp;
+late String cbname = "branch name current";
+late String nmname = "bob";
+late String nmrole = "role";
 
 

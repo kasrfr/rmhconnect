@@ -29,7 +29,10 @@ class _AdminHomeState extends State<AdminHome> {
       body: SingleChildScrollView(
           child: Column(
               children:[
-                Text("Events Pages"),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Text("Events Pages", style: mytextmed),
+                ),
                 OrgGetInfo()
               ]
           )
