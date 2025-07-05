@@ -139,23 +139,27 @@ class _SignupPageState extends State<SignupPage> {
                   onChanged: (val) => setState(() => password = val)
                 ),
 
-                // Todo: Add dropdownsearch item here [https://pub.dev/packages/dropdown_search]
 
 
-                DropdownSearch<String>(
-                items: (f, cs) => orgNames,
-                  popupProps: PopupProps.menu(
-                  fit: FlexFit.loose
-                  ),
-                  selectedItem: valueOrg,
-                  validator: (String? valueOrg) {
-                    if (valueOrg == null || valueOrg.isEmpty) {
-                    return 'Please select your location';
-                    }
-                    return null;
-                    },
-                      onChanged: (val) => setState(() => valueOrg = val)
+
+                SizedBox(
+                  height: 25
                 ),
+                DropdownSearch<String>(
+                  items: (f, cs) => orgNames,
+                    popupProps: PopupProps.menu(
+                    fit: FlexFit.loose
+                    ),
+                    selectedItem: valueOrg,
+                    validator: (String? valueOrg) {
+                      if (valueOrg == null || valueOrg.isEmpty) {
+                      return 'Please select your location';
+                      }
+                      return null;
+                      },
+                        onChanged: (val) => setState(() => valueOrg = val)
+                  ),
+
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: ElevatedButton(

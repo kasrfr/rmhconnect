@@ -31,84 +31,86 @@ class _LoginPageState extends State<LoginPage> {
             title: const Text('Login'),
             backgroundColor: backgroundColor
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                  child: Logo(height: 300),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      helperText: 'Email',
-                    ),
-                    validator: (String? email) {
-                      if (email == null || email.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                    onChanged: (val) => setState(() => email = val)
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                    child: Logo(height: 300),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        helperText: 'Password'
-                    ),
-                    validator: (String? email) {
-                      if (email == null || email.isEmpty) {
-                        return 'We are sure you have a password';
-                      }
-                      return null;
-                    },
-                    onChanged: (val) => setState(() => password = val)
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          );
-                          final userDoc = await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get();
-                          final role = userDoc.data()?['role'] ?? 'patient';
-                          if (role == 'admin') {
-                            Navigator.pushReplacementNamed(context, '/admin_navigation');
-                          } else {
-                            Navigator.pushReplacementNamed(context, '/navigation_screen');
-                          }
-                        } catch (e) {
-                          print(e);
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        helperText: 'Email',
+                      ),
+                      validator: (String? email) {
+                        if (email == null || email.isEmpty) {
+                          return 'Please enter your email';
                         }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue
-                    ),
-                    child: const Text(
-                        'Log In',
-                        style: TextStyle(
-                            color: Colors.white
-                        )
+                        return null;
+                      },
+                      onChanged: (val) => setState(() => email = val)
                     ),
                   ),
-                ),
-
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          helperText: 'Password'
+                      ),
+                      validator: (String? email) {
+                        if (email == null || email.isEmpty) {
+                          return 'We are sure you have a password';
+                        }
+                        return null;
+                      },
+                      onChanged: (val) => setState(() => password = val)
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            );
+                            final userDoc = await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).get();
+                            final role = userDoc.data()?['role'] ?? 'patient';
+                            if (role == 'admin') {
+                              Navigator.pushReplacementNamed(context, '/admin_navigation');
+                            } else {
+                              Navigator.pushReplacementNamed(context, '/navigation_screen');
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue
+                      ),
+                      child: const Text(
+                          'Log In',
+                          style: TextStyle(
+                              color: Colors.white
+                          )
+                      ),
+                    ),
+                  ),
+          
+                ],
+              ),
             ),
           ),
         )
