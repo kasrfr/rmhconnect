@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
@@ -19,6 +20,9 @@ class _ProfilePageState extends State<ProfilePage> {
   String role = '';
   String email = '';
   String location = '';
+  bool locationPressed = false;
+  List<String> orgNames = [];
+  bool isLoading = true;
 
   @override
   void initState(){
@@ -41,6 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
           role = userDoc['role'];
           email = userDoc['email'];
           location = userDoc['location'];
+          loadOrgNames();
         }catch(e){
           name = '';
           role = '';
@@ -49,8 +54,23 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         informationLoaded = true;
       });
-    }
+      }
 
+  }
+
+  Future<void> loadOrgNames() async {
+    final snapshot =
+    await FirebaseFirestore.instance.collection('organizations').get();
+    final names = snapshot.docs
+        .map((doc) => doc.data()['name'] as String?)
+        .whereType<String>()
+        .toList();
+
+    setState(() {
+      orgNames = names;
+      isLoading = false;
+      print("Loaded $orgNames successfully");
+    });
   }
 
   void _showSettingsMenu() async {
@@ -141,10 +161,52 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 30),
               GestureDetector(
                 onTap: (){
-                  Navigator.pushNamed(context, '/directory');
+                  //Navigator.pushNamed(context, '/directory');
+                  setState((){locationPressed = true;});
+                  print("Successfully changed locationPressed to $locationPressed. isLoading is currently $isLoading.");// change to drop-dwon
                 },
-                child: Text("Branch Directory", style: TextStyle(fontSize:24, color: Colors.blue, fontWeight: FontWeight.bold)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Expanded(child:Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Current Branch:", style: TextStyle(fontSize:22, color:Colors.black)),
+                      SizedBox(width: 10),
+                      // if(locationPressed && isLoading){ const CircularProgressIndicator()};
+                      /*locationPressed && (isLoading == false) ?
+                      Column(
+                        children:[
+                          Text(location, style: TextStyle(fontSize:22, color: Colors.blue), softWrap: true),
+                        ]
+                      ) :*/
+                      Expanded(
+                        // todo: needs to be fixed so that everything is not all pushed to the left
+                          child:
+                          Text(location, style: TextStyle(fontSize:22, color: Colors.blue))
+                      ), // , fontWeight: FontWeight.bold)),
+                    ],
+                  )),
+                ),
               ),
+              locationPressed && (isLoading == false) ?
+                DropdownSearch<String>(
+                    items: (f, cs) => orgNames,
+                    popupProps: PopupProps.menu(
+                        fit: FlexFit.loose
+                    ),
+                    selectedItem: location,
+                    // todo: need to actually change the registered location in Firebase
+                    onChanged: (val) => setState(() => location = val!)
+                    // todo: need to fix the below to replace ln 192
+                  /*onChanged: (val) { WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        location = val!;
+                        //locationPressed = false;
+                      });
+                    });
+                    },*/
+                )
+              : SizedBox(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
                 child: Text("My Events", style: titlingblck),
