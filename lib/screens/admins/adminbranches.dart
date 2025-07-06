@@ -41,6 +41,7 @@ class _AdminbranchesState extends State<Adminbranches> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: backgroundColor,
         onPressed: (){
           showDialog(
             context: context,

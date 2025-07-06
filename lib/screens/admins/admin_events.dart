@@ -68,6 +68,7 @@ class _AdminEventsState extends State<AdminEvents> {
           )
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: backgroundColor,
         onPressed: (){
           showDialog(
               context: context,

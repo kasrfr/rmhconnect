@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rmhconnect/constants.dart';
 
 class OrgGetInfo extends StatelessWidget {
   const OrgGetInfo({super.key});
@@ -94,34 +95,39 @@ class OrgGetInfo extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(orgName),
+                          //child: Text(orgName),
                         ),
                         ...activities.map((activity) {
-                          return Card(
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: ExpansionTile(
-                              leading: const Icon(Icons.event),
-                              title: Text(activity['title'] ?? 'Activity'),
-                              subtitle: activity['dateTime'] != null
-                                  ? Text(_formatDateTime(activity['dateTime'] as Timestamp))
-                                  : null,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Text("Description:"),
-                                      const SizedBox(height: 8),
-                                      Text(activity['description'] ?? 'No description provided'),
-                                    ],
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Card(
+                              color: Color(0xFFFFDEDE),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: ExpansionTile(
+                                leading: const Icon(Icons.event),
+                                title: Text(activity['title'] ?? 'Activity'),
+                                trailing: Text(orgName, style: TextStyle(fontSize: 15, color: backgroundColor, fontWeight: FontWeight.bold)),
+                                subtitle: activity['dateTime'] != null
+                                    ? Text(_formatDateTime(activity['dateTime'] as Timestamp))
+                                    : null,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("Description:"),
+                                        const SizedBox(height: 8),
+                                        Text(activity['description'] ?? 'No description provided'),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         }).toList(),

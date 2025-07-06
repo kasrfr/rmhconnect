@@ -14,30 +14,45 @@ class memberlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      color: const Color(0xFFFFDEDE),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(pfp),
-            ),
-            SizedBox(width: 15),
-            Column(
-              children: [
-                Text(name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                Text(role, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
-              ]
-            )
-          ]
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
         ),
-      )
+        color: const Color(0xFFFFDEDE),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(pfp),
+              ),
+              SizedBox(width: 15),
+              Column(
+                children: [
+                  Text(name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(role, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
+                ]
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  /*
+                    name = "deleted user";
+                    role = "deleted role";
+                    pfp = "https://tinyurl.com/36yyk2zd";*/
+                },
+                child: const Icon(Icons.delete, color: Colors.red, size: 30),
+              )
+            ]
+          ),
+        ),
+
+      ),
     );
   }
 }
