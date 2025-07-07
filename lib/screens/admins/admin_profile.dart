@@ -25,8 +25,6 @@ class _AdminProfileState extends State<AdminProfile> {
   String role = '';
   String email = '';
   String location = '';
-  late TextEditingController namecontrol = TextEditingController();
-  late TextEditingController rolecontrol = TextEditingController();
 
   @override
   void initState(){
@@ -153,64 +151,6 @@ class _AdminProfileState extends State<AdminProfile> {
             ),
           ]
       ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: backgroundColor,
-          onPressed: (){
-            showDialog(
-                context: context,
-                builder: (BuildContext context){
-                  return AlertDialog(
-                      title: Text("Admin New Admin"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextField(
-                            controller: namecontrol,
-                            decoration: InputDecoration(
-                              labelText: "New Admin Name",
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          TextField(
-                            controller: namecontrol,
-                            decoration: InputDecoration(
-                              labelText: "New Admin Role",
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  namecontrol.clear();
-                                  rolecontrol.clear();
-                                },
-                                child: Text("Cancel"),
-                              ),
-                              SizedBox(width: 20),
-                              OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    nmname = namecontrol.text;
-                                    nmrole = rolecontrol.text;
-                                    namecontrol.clear();
-                                    rolecontrol.clear();
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Create"),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                  );
-                }
-            );
-          },
-          child: Icon(Icons.add),
-        ),
       body: Column(
           children:[
             SizedBox(height: 20),
@@ -287,8 +227,41 @@ class _AdminProfileState extends State<AdminProfile> {
 
               ],
             ),
-            memberlist(name: "Carter", role: "President", pfp: "assets/images/person-icon.png"),
-        ]
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .where('location', isEqualTo: location)
+                      .where('role', isEqualTo: 'admin') // <-- Filter for admins only
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(child: Text("No admins found."));
+                    }
+
+                    final users = snapshot.data!.docs;
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: users.length,
+                      itemBuilder: (context, index) {
+                        final user = users[index];
+                        final name = user['name'] ?? 'Unknown';
+                        final role = user['role'] ?? 'Member';
+                        return memberlist(name: name, role: role, pfp: "assets/images/person-icon.png");
+                      },
+                    );
+                  },
+                ),
+              ),
+            )
+
+          ]
       )
     );
   }

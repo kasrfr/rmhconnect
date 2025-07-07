@@ -39,16 +39,6 @@ class memberlist extends StatelessWidget {
                   Text(name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   Text(role, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
                 ]
-              ),
-              Spacer(),
-              GestureDetector(
-                onTap: () {
-                  /*
-                    name = "deleted user";
-                    role = "deleted role";
-                    pfp = "https://tinyurl.com/36yyk2zd";*/
-                },
-                child: const Icon(Icons.delete, color: Colors.red, size: 30),
               )
             ]
           ),

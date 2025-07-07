@@ -51,7 +51,7 @@ class _AdminEventsState extends State<AdminEvents> {
       );
       final timestamp = Timestamp.fromDate(combinedDateTime);
 
-      await FirebaseFirestore.instance
+      final eventRef = await FirebaseFirestore.instance
           .collection('organizations')
           .doc(orgDocId)
           .collection('activities')
@@ -60,7 +60,7 @@ class _AdminEventsState extends State<AdminEvents> {
         'description': description,
         'dateTime': timestamp,
       });
-
+      await eventRef.update({'id': eventRef.id});
       print("Activity added successfully.");
     } catch (e) {
       print("Failed to add activity: $e");

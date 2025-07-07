@@ -110,7 +110,7 @@ class OrgGetInfo extends StatelessWidget {
                               child: ExpansionTile(
                                 leading: const Icon(Icons.event),
                                 title: Text(activity['title'] ?? 'Activity'),
-                                trailing: Text(orgName, style: TextStyle(fontSize: 15, color: backgroundColor, fontWeight: FontWeight.bold)),
+                                // trailing: Text(orgName, style: TextStyle(fontSize: 15, color: backgroundColor, fontWeight: FontWeight.bold)),
                                 subtitle: activity['dateTime'] != null
                                     ? Text(_formatDateTime(activity['dateTime'] as Timestamp))
                                     : null,
