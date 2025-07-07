@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
@@ -17,6 +18,13 @@ class AdminProfile extends StatefulWidget {
 
 class _AdminProfileState extends State<AdminProfile> {
   User? user;
+  List<String> orgNames = [];
+  bool isLoading = true;
+  bool informationLoaded = false;
+  String name = '';
+  String role = '';
+  String email = '';
+  String location = '';
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController rolecontrol = TextEditingController();
 
@@ -24,7 +32,51 @@ class _AdminProfileState extends State<AdminProfile> {
   void initState(){
     super.initState();
     user = FirebaseAuth.instance.currentUser;
+    init();
   }
+
+  Future<void> init() async{
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        try{
+          name = userDoc['name'];
+          role = userDoc['role'];
+          email = userDoc['email'];
+          location = userDoc['location'];
+          loadOrgNames();
+        }catch(e){
+          name = '';
+          role = '';
+          email = '';
+          location = '';
+        }
+        informationLoaded = true;
+      });
+    }
+
+  }
+
+  Future<void> loadOrgNames() async {
+    final snapshot =
+    await FirebaseFirestore.instance.collection('organizations').get();
+    final names = snapshot.docs
+        .map((doc) => doc.data()['name'] as String?)
+        .whereType<String>()
+        .toList();
+
+    setState(() {
+      orgNames = names;
+      isLoading = false;
+      print("Loaded $orgNames successfully");
+    });
+  }
+
 
   void _showSettingsMenu() async {
     final action = await showModalBottomSheet<String>(
@@ -63,6 +115,16 @@ class _AdminProfileState extends State<AdminProfile> {
     }
   }
 
+  Future<void> updateUserLocationInFirebase(String newLocation) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'location': newLocation});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +153,7 @@ class _AdminProfileState extends State<AdminProfile> {
             ),
           ]
       ),
-        floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
           backgroundColor: backgroundColor,
           onPressed: (){
             showDialog(
@@ -151,54 +213,81 @@ class _AdminProfileState extends State<AdminProfile> {
         ),
       body: Column(
           children:[
-            Container(
-            //children: [
-              child: Column(
-              children: [
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Profilephoto(
-                          pfp: "https://tinyurl.com/muj74rse",
-                    ),
-                    Column(
+            SizedBox(height: 20),
+            informationLoaded ?
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(username, style: titlingblck),
-                        Text(role, style: mytextnormal),
-                        Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-                        Text(location, style: mytextnormal),
+                        Profilephoto(
+                          pfp: "assets/images/person-icon.png",
+                        ),
+                        Column(
+                            children: [
+                              Text(name, style: mytextnormal),
+                              Text(role, style: mytextnormal),
+                              Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
+                              Text(location, style: mytextnormal),
+                            ]
+                        )
                       ]
-                    )
-                  ]
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,10,0,0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(25,0,0,0),
-                        child: Text("My Branches: ", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                      ),
-                      Text("Branch A", style: TextStyle(fontSize: 18, color: Colors.blue)),
-                    ],
                   ),
-                ),
-                Row(
+                ],
+              )
+              : Center(child: CircularProgressIndicator()),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(25,8,0,0),
-                      child: Text("Branch A Admin List", style: TextStyle(fontSize: 15, color: backgroundColor, fontWeight: FontWeight.bold)),
+                      padding: const EdgeInsets.fromLTRB(25,0,0,0),
+                      child: Text("Current Branch: ", style: TextStyle(fontSize: 22)),
                     ),
+                    SizedBox(width: 10),
 
-
-                  ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: isLoading == false
+                            ? SizedBox(
+                          width: 150,
+                          child: DropdownSearch<String>(
+                            items: (f, cs) => orgNames,
+                            popupProps: const PopupProps.menu(
+                              fit: FlexFit.loose,
+                            ),
+                            selectedItem: location,
+                            onChanged: (val) {
+                              if (val != null) {
+                                setState(() {
+                                  location = val;
+                                });
+                                updateUserLocationInFirebase(location);
+                              }
+                            },
+                          ),
+                        )
+                            : const SizedBox(),
+                      ),
+                    ),
+                  ]
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25,8,0,0),
+                  child: Text("Admin Members", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
+
+
               ],
             ),
-            //]
-          ),
-            memberlist(name: "Carter", role: "President", pfp: "https://tinyurl.com/muj74rse"),
+            memberlist(name: "Carter", role: "President", pfp: "assets/images/person-icon.png"),
         ]
       )
     );

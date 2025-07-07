@@ -31,7 +31,7 @@ class _AdminHomeState extends State<AdminHome> {
               children:[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: Text("Events Pages", style: mytextmed),
+                  child: Text("Upcoming Events", style: mytextmed),
                 ),
                 OrgGetInfo()
               ]

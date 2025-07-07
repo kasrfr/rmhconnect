@@ -78,11 +78,12 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColor,
-        title: Text("Announcements", style: titling),
+        title: Text(widget.orgName, style: titling),
         centerTitle: true
       ),
       body: Column(
         children: [
+          Text("Announcements", style: mytextmed),
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: fetchAnnouncements(),
@@ -106,14 +107,15 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                   itemBuilder: (context, index) {
                     final item = announcements[index];
                     // final imgUrl = item['url'];
-                    final imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLn2vN-qAufnhM8t2e4OkZ6-m3Md6_Gk9B7g&s";
+                    final imgUrl = "https://e7.pngegg.com/pngimages/981/645/png-clipart-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette.png";
                     final description = item['description'];
                     final timestamp = item['timestamp'] as Timestamp?;
                     final date = timestamp?.toDate();
 
                     return ListTile(
                       leading: imgUrl != null
-                          ? Image.network(imgUrl, width: 60, fit: BoxFit.cover)
+                          // ? Image.network(imgUrl, width: 60, fit: BoxFit.cover)
+                          ? Image.asset('assets/images/person-icon.png')
                           : null,
                       title: Text(description ?? 'No description'),
                       subtitle: Text(
@@ -131,6 +133,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: backgroundColor,
         onPressed: (){
           showDialog(
               context: context,

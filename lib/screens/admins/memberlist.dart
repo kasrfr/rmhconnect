@@ -16,7 +16,7 @@ class memberlist extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
@@ -29,7 +29,9 @@ class memberlist extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(pfp),
+                // backgroundImage: NetworkImage(pfp),
+                backgroundImage: AssetImage(pfp),
+                backgroundColor: Colors.white,
               ),
               SizedBox(width: 15),
               Column(
