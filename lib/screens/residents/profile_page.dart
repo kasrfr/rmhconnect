@@ -110,6 +110,16 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> updateUserLocationInFirebase(String newLocation) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'location': newLocation});
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,71 +152,75 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Center(
           child: Column(
             children: [
-              Profilephoto(pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill"),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                child: Text(name, style: mytextmed),
-              ),
-
               informationLoaded ?
-                Column(
+                Container(
+                //children: [
+                child: Column(
                   children: [
-                    Text(role, style: mytextnormal),
-                    Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-                    Text(location, style: mytextnormal),
+                    SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Profilephoto(
+                            pfp: "assets/images/person-icon.png",
+                          ),
+                          Column(
+                              children: [
+                                Text(name, style: mytextnormal),
+                                Text(role, style: mytextnormal),
+                                Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
+                                Text(location, style: mytextnormal),
+                              ]
+                          )
+                        ]
+                    ),
                   ],
-                )
+                ),
+                //]
+              )
               : Center(child: CircularProgressIndicator()),
 
               SizedBox(height: 30),
-              GestureDetector(
-                onTap: (){
-                  //Navigator.pushNamed(context, '/directory');
-                  setState((){locationPressed = true;});
-                  print("Successfully changed locationPressed to $locationPressed. isLoading is currently $isLoading.");// change to drop-dwon
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Expanded(child:Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Current Branch:", style: TextStyle(fontSize:22, color:Colors.black)),
-                      SizedBox(width: 10),
-                      // if(locationPressed && isLoading){ const CircularProgressIndicator()};
-                      /*locationPressed && (isLoading == false) ?
-                      Column(
-                        children:[
-                          Text(location, style: TextStyle(fontSize:22, color: Colors.blue), softWrap: true),
-                        ]
-                      ) :*/
-                      Expanded(
-                        // todo: needs to be fixed so that everything is not all pushed to the left
-                          child:
-                          Text(location, style: TextStyle(fontSize:22, color: Colors.blue))
-                      ), // , fontWeight: FontWeight.bold)),
-                    ],
-                  )),
-                ),
-              ),
-              locationPressed && (isLoading == false) ?
-                DropdownSearch<String>(
-                    items: (f, cs) => orgNames,
-                    popupProps: PopupProps.menu(
-                        fit: FlexFit.loose
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25,0,0,0),
+                    child: Text("Current Branch: ", style: TextStyle(fontSize: 22)),
+                  ),
+                  SizedBox(width: 10),
+
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: isLoading == false
+                        ? SizedBox(
+                            width: 150,
+                            child: DropdownSearch<String>(
+                              items: (f, cs) => orgNames,
+                              popupProps: const PopupProps.menu(
+                                fit: FlexFit.loose,
+                              ),
+                              selectedItem: location,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  setState(() {
+                                    location = val;
+                                    locationPressed = false;
+                                  });
+                                  updateUserLocationInFirebase(location);
+                                }
+                              },
+                            ),
+                          )
+                          : const SizedBox(),
                     ),
-                    selectedItem: location,
-                    // todo: need to actually change the registered location in Firebase
-                    onChanged: (val) => setState(() => location = val!)
-                    // todo: need to fix the below to replace ln 192
-                  /*onChanged: (val) { WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        location = val!;
-                        //locationPressed = false;
-                      });
-                    });
-                    },*/
-                )
-              : SizedBox(),
+                  ),
+                ]
+              ),
+
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
                 child: Text("My Events", style: titlingblck),

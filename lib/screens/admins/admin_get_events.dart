@@ -34,26 +34,26 @@ class AdminGetEvents extends StatelessWidget {
           return const Center(child: Text("Organization not found"));
         }
 
-        final orgDoc = orgSnapshot.data!.docs.first;
+        final orgDocId = orgSnapshot.data!.docs.first.id;
 
-        return FutureBuilder<QuerySnapshot>(
-          future: FirebaseFirestore.instance
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
               .collection('organizations')
-              .doc(orgDoc.id)
+              .doc(orgDocId)
               .collection('activities')
               .where('dateTime', isGreaterThan: Timestamp.now())
               .orderBy('dateTime')
-              .get(),
+              .snapshots(),
           builder: (context, activitySnapshot) {
-            if (!activitySnapshot.hasData) {
+            if (activitySnapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            final activities = activitySnapshot.data!.docs;
-
-            if (activities.isEmpty) {
-              return const Center(child: Text("No upcoming activities"));
+            if (!activitySnapshot.hasData || activitySnapshot.data!.docs.isEmpty) {
+              return const Center(child: Text("No upcoming events"));
             }
+
+            final activities = activitySnapshot.data!.docs;
 
             return ListView.builder(
               shrinkWrap: true,
@@ -64,8 +64,11 @@ class AdminGetEvents extends StatelessWidget {
                 final title = activity['title'] ?? 'Event';
                 final description = activity['description'] ?? 'No description';
                 final dateTime = activity['dateTime'] as Timestamp;
+                final eventID = activity.id;
 
                 return Events(
+                  eventID: eventID,
+                  orgName: orgName,
                   evname: title,
                   evdescrip: description,
                   evtime: _formatTime(dateTime),

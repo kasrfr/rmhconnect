@@ -8,6 +8,7 @@ import 'package:rmhconnect/screens/admins/admin_branch_deatils_screen.dart';
 import 'package:rmhconnect/screens/admins/admin_events.dart';
 import 'package:rmhconnect/screens/admins/admin_home.dart';
 import 'package:rmhconnect/screens/admins/admin_navigation.dart';
+import 'package:rmhconnect/screens/admins/super_admin/super_admin_navigation.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
 import 'package:rmhconnect/screens/residents/navigation_page.dart';
 import 'package:rmhconnect/screens/residents/profile_page.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/admin_navigation': (context) => AdminNavigation(),
         '/admin_home': (context) => AdminHome(),
         '/admin_branch': (context) => Adminbranches(),
-        // '/admin_announcements': (context) => AdminMembers(),
+        '/super_admin_navigation': (context) => SuperAdminNavigation(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/admin_branch_details') {

@@ -19,17 +19,17 @@ class _ResidentsHomeState extends State<ResidentsHome> {
           automaticallyImplyLeading: false,
           title: Text("RMHC CONNECT", style: titling),
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,30,0),
-              child: Icon(Icons.notifications, color: Colors.white, size: 38),
-            ),
-          ]
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.fromLTRB(0,0,30,0),
+          //     child: Icon(Icons.notifications, color: Colors.white, size: 38),
+          //   ),
+          // ]
       ),
       body: SingleChildScrollView(
         child: Column(
           children:[
-            Text("Events Pages"),
+            Text("Upcoming Events", style: mytextmed),
             OrgGetInfo()
           ]
         )

@@ -59,7 +59,7 @@ class _AdminMembersState extends State<AdminMembers> {
                   final user = users[index];
                   final name = user['name'] ?? 'Unknown';
                   final role = user['role'] ?? 'Member';
-                  return memberlist(name: name, role: role, pfp: "https://media.cnn.com/api/v1/images/stellar/prod/160107100400-monkey-selfie.jpg?q=w_2912,h_1638,x_0,y_0,c_fill");
+                  return memberlist(name: name, role: role, pfp: "assets/images/person-icon.png");
                 },
               );
             },

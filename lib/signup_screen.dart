@@ -59,7 +59,7 @@ class _SignupPageState extends State<SignupPage> {
         child: Padding(
           padding: const EdgeInsets.all(30),
           child: isLoading ?
-            const CircularProgressIndicator() :
+            Center(child: const CircularProgressIndicator()) :
             Form(
               key: _formKey,
               child: Column(
@@ -186,7 +186,7 @@ class _SignupPageState extends State<SignupPage> {
                               'name': name,
                             });
                           if (role == 'admin') {
-                            Navigator.pushReplacementNamed(context, '/admin_home');
+                            Navigator.pushReplacementNamed(context, '/admin_navigation');
                           }
                           else {
                             Navigator.pushReplacementNamed(context, '/navigation_screen');

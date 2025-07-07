@@ -89,6 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                             final role = userDoc.data()?['role'] ?? 'patient';
                             if (role == 'admin') {
                               Navigator.pushReplacementNamed(context, '/admin_navigation');
+                            } else if(role == 'super_admin'){
+                              Navigator.pushReplacementNamed(context, '/super_admin_navigation');
                             } else {
                               Navigator.pushReplacementNamed(context, '/navigation_screen');
                             }

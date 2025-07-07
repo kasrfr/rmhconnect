@@ -26,25 +26,31 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                color: const Color(0xFFFFDEDE),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(110,20, 110,20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                      Text(widget.location, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
-                    ]
+              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              child: Center(
+                child: SizedBox(
+                  width: double.infinity, // or a fixed value like 300 if needed
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    color: const Color(0xFFFFDEDE),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(widget.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          Text(widget.location, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
+                        ],
+                      ),
+                    ),
                   ),
-                )
+                ),
               ),
-              ),
+            ),
+
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -110,7 +116,6 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
               ]
             ),
             SizedBox(height: 20),
-            // Members Button
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(

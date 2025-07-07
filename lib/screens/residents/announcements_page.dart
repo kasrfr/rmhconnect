@@ -60,27 +60,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
       appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: backgroundColor,
-          title: Text("My Profile", style: titling),
+          title: Text("Announcements", style: titling),
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,30,0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFFE37575)
-                      )
-                  ),
-                  Icon(Icons.person, color: Color(0xFFFFDEDE), size: 40),
-                ],
-              ),
-            ),
-          ]
       ),
 
       body: Column(

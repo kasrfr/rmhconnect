@@ -40,64 +40,6 @@ class _AdminbranchesState extends State<Adminbranches> {
         title: Text("Branches", style: titling),
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (BuildContext context){
-              return AlertDialog(
-                  title: Text("Create New Branch"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: namecontrol,
-                        decoration: InputDecoration(
-                          labelText: "New Branch Name",
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        controller: loccontrol,
-                        decoration: InputDecoration(
-                          labelText: "New Branch Location",
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          OutlinedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            namecontrol.clear();
-                            loccontrol.clear();
-                          },
-                          child: Text("Cancel"),
-                        ),
-                          SizedBox(width: 20),
-                          OutlinedButton(
-                            onPressed: () {
-                              setState(() {
-                                nbname = namecontrol.text;
-                                nbloc = loccontrol.text;
-                                namecontrol.clear();
-                                loccontrol.clear();
-                              });
-                              addOrganizationBranch(nbname, nbloc);
-                              Navigator.pop(context);
-                            },
-                            child: Text("Create"),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-              );
-            }
-          );
-        },
-          child: Icon(Icons.add),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
