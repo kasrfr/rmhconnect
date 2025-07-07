@@ -123,6 +123,16 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
     }
   }
 
+  Future<void> addAdmin(String email) async {
+    try {
+      await FirebaseFirestore.instance.collection('admins').add({
+        'email': email,
+      });
+      print('Admin with email "$email" added successfully.');
+    } catch (e) {
+      print('Error adding admin: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,21 +169,14 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
                 context: context,
                 builder: (BuildContext context){
                   return AlertDialog(
-                      title: Text("Admin New Admin"),
+                      title: Text("Add New Admin"),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextField(
                             controller: namecontrol,
                             decoration: InputDecoration(
-                              labelText: "New Admin Name",
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          TextField(
-                            controller: namecontrol,
-                            decoration: InputDecoration(
-                              labelText: "New Admin Role",
+                              labelText: "New Admin email",
                             ),
                           ),
                           SizedBox(height: 20),
@@ -183,19 +186,17 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                   namecontrol.clear();
-                                  rolecontrol.clear();
                                 },
                                 child: Text("Cancel"),
                               ),
                               SizedBox(width: 20),
                               OutlinedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   setState(() {
                                     nmname = namecontrol.text;
-                                    nmrole = rolecontrol.text;
                                     namecontrol.clear();
-                                    rolecontrol.clear();
                                   });
+                                  await addAdmin(nmname);
                                   Navigator.pop(context);
                                 },
                                 child: Text("Create"),

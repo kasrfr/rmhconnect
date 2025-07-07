@@ -186,7 +186,7 @@ class _SignupPageState extends State<SignupPage> {
                               'name': name,
                             });
                           if (role == 'admin') {
-                            Navigator.pushReplacementNamed(context, '/admin_home');
+                            Navigator.pushReplacementNamed(context, '/admin_navigation');
                           }
                           else {
                             Navigator.pushReplacementNamed(context, '/navigation_screen');
