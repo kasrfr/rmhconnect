@@ -33,14 +33,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: /*const*/ EdgeInsets.all(resizedHeight(context, 30.0)),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                    child: Logo(height: 300),
+                    child: Logo(height: (resizedHeight(context, 300))),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),

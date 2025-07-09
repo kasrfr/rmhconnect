@@ -12,17 +12,30 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final TextStyle versionStyle = TextStyle(
+  /*final TextStyle versionStyle = TextStyle(
     color: Colors.white.withOpacity(0.5),
-    fontSize: 32
-  );
-  final TextStyle titleStyle = TextStyle(
+    fontSize: resizedHeight(context, 32)
+  );*/
+  TextStyle versionStyle(context){
+    return TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontSize: resizedHeight(context, 32)
+    );
+  }
+
+  /*final TextStyle titleStyle = TextStyle(
       fontSize: 32
+  );*/
+TextStyle titleStyle(context){
+  return TextStyle(
+      fontSize: resizedHeight(context, 32)
   );
+}
+
   @override
   void initState(){
     super.initState();
-    init();
+    //init();
   }
 
   Future<void> init() async{
@@ -58,25 +71,25 @@ class _SplashScreenState extends State<SplashScreen> {
               //mainAxisAlignment: MainAxisAlignment.center,
               children:[
                 Padding(
-                  padding: const EdgeInsets.only(top: 75),
+                  padding: /*const*/ EdgeInsets.only(top: resizedHeight(context, 75)),
                   child: Text(
                     "Ronald McDonald",
                         softWrap: true,
-                        style: titleStyle
+                        style: titleStyle(context)
                   ),
                 ),
                 Text(
                     "House Charities",
                     softWrap: true,
-                    style: titleStyle
+                    style: titleStyle(context)
                 ),
-                Logo(height: 350),
-                Spacer(flex: 1),
+                Logo(height: resizedHeight(context, 350)),
+                Spacer(flex: resizedHeight(context, 1).round()),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 0),
+                  padding: /*const*/ EdgeInsets.symmetric(vertical: resizedHeight(context, 50), horizontal: 0),
                   child: Text(
                       "Version 1.0.0",
-                      style: versionStyle
+                      style: versionStyle(context)
                   ),
                 ),
               ]

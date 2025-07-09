@@ -20,3 +20,16 @@ late String nenme;
 late String nedscrp;
 
 
+double resizedHeight(context, double mediumPhoneWidgetHeight){
+  Size size = MediaQuery.of(context).size;
+  double deviceHeight = size.height;
+  double mediumPhoneTotalHeight = 924;
+  return deviceHeight*mediumPhoneWidgetHeight/mediumPhoneTotalHeight;
+}
+
+double aggressivelyResizedHeight(context, double mediumPhoneWidgetHeight){
+  Size size = MediaQuery.of(context).size;
+  double deviceHeight = size.height;
+  double mediumPhoneTotalHeight = 924;
+  return 0.80*deviceHeight*mediumPhoneWidgetHeight/mediumPhoneTotalHeight;
+}
