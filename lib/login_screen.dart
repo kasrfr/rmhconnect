@@ -18,8 +18,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
+  String error = '';
   final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -79,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: ElevatedButton(
                       onPressed: () async {
+                        setState(() { error = ''; });
                         if (_formKey.currentState!.validate()) {
                           try {
                             final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushReplacementNamed(context, '/navigation_screen');
                             }
                           } catch (e) {
-                            print(e);
+                            setState(() { error = e.toString(); });
                           }
                         }
                       },
@@ -110,7 +111,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-          
+                  if (error.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(error, style: TextStyle(color: Colors.red)),
+                  ],
                 ],
               ),
             ),

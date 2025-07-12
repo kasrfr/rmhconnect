@@ -149,92 +149,94 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ]
       ),
-      body: Center(
-          child: Column(
-            children: [
-              informationLoaded ?
-                Container(
-                //children: [
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Profilephoto(
-                            pfp: "assets/images/person-icon.png",
-                          ),
-                          Column(
-                              children: [
-                                Text(name, style: mytextnormal),
-                                Text(role, style: mytextnormal),
-                                Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-                                Text(location, style: mytextnormal),
-                              ]
-                          )
-                        ]
-                    ),
-                  ],
-                ),
-                //]
-              )
-              : Center(child: CircularProgressIndicator()),
-
-              SizedBox(height: 30),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(25,0,0,0),
-                    child: Text("Current Branch: ", style: TextStyle(fontSize: 22)),
-                  ),
-                  SizedBox(width: 10),
-
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: isLoading == false
-                        ? SizedBox(
-                            width: 150,
-                            child: DropdownSearch<String>(
-                              items: (f, cs) => orgNames,
-                              popupProps: const PopupProps.menu(
-                                fit: FlexFit.loose,
-                              ),
-                              selectedItem: location,
-                              onChanged: (val) {
-                                if (val != null) {
-                                  setState(() {
-                                    location = val;
-                                    locationPressed = false;
-                                  });
-                                  updateUserLocationInFirebase(location);
-                                }
-                              },
+      body: SingleChildScrollView(
+        child: Center(
+            child: Column(
+              children: [
+                informationLoaded ?
+                  Container(
+                  //children: [
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Profilephoto(
+                              pfp: "assets/images/person-icon.png",
                             ),
-                          )
-                          : const SizedBox(),
-                    ),
+                            Column(
+                                children: [
+                                  Text(name, style: mytextnormal),
+                                  Text(role, style: mytextnormal),
+                                  Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
+                                  Text(location, style: mytextnormal),
+                                ]
+                            )
+                          ]
+                      ),
+                    ],
                   ),
-                ]
-              ),
-
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
-                child: Text("My Events", style: titlingblck),
-              ),
-              SingleChildScrollView(
-                child: Column(
+                  //]
+                )
+                : Center(child: CircularProgressIndicator()),
+        
+                SizedBox(height: 30),
+        
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    OrgGetInfo()
-                  ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(25,0,0,0),
+                      child: Text("Current Branch: ", style: TextStyle(fontSize: 22)),
+                    ),
+                    SizedBox(width: 10),
+        
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: isLoading == false
+                          ? SizedBox(
+                              width: 150,
+                              child: DropdownSearch<String>(
+                                items: (f, cs) => orgNames,
+                                popupProps: const PopupProps.menu(
+                                  fit: FlexFit.loose,
+                                ),
+                                selectedItem: location,
+                                onChanged: (val) {
+                                  if (val != null) {
+                                    setState(() {
+                                      location = val;
+                                      locationPressed = false;
+                                    });
+                                    updateUserLocationInFirebase(location);
+                                  }
+                                },
+                              ),
+                            )
+                            : const SizedBox(),
+                      ),
+                    ),
+                  ]
                 ),
-              )
-            ]
-          )
-        )
+        
+        
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
+                  child: Text("My Events", style: titlingblck),
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      OrgGetInfo()
+                    ],
+                  ),
+                )
+              ]
+            )
+          ),
+      )
     );
   }
 }
