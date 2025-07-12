@@ -84,25 +84,27 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                   return const Center(child: Text('No announcements available'));
                 }
 
-                return ListView.builder(
-                  itemCount: announcements.length,
-                  itemBuilder: (context, index) {
-                    final item = announcements[index];
-                    final imgUrl = item['url'];
-                    final description = item['description'];
-                    final timestamp = item['timestamp'] as Timestamp?;
-                    final date = timestamp?.toDate();
-
-                    return ListTile(
-                      title: Text(description ?? 'No description'),
-                      subtitle: Text(
-                        date != null
-                            ? DateFormat.yMMMd().add_jm().format(date)
-                            : 'No timestamp',
-                      ),
-                      onTap: () {},
-                    );
-                  },
+                return Card(
+                  child: ListView.builder(
+                    itemCount: announcements.length,
+                    itemBuilder: (context, index) {
+                      final item = announcements[index];
+                      final imgUrl = item['url'];
+                      final description = item['description'];
+                      final timestamp = item['timestamp'] as Timestamp?;
+                      final date = timestamp?.toDate();
+                  
+                      return ListTile(
+                        title: Text(description ?? 'No description'),
+                        subtitle: Text(
+                          date != null
+                              ? DateFormat.yMMMd().add_jm().format(date)
+                              : 'No timestamp',
+                        ),
+                        onTap: () {},
+                      );
+                    },
+                  ),
                 );
               },
             ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminAnnouncements extends StatefulWidget {
   final String orgName;
@@ -14,7 +15,7 @@ class AdminAnnouncements extends StatefulWidget {
 class _AdminAnnouncementsState extends State<AdminAnnouncements> {
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController descripcontrol = TextEditingController();
-
+  late String postname = "Unknowner";
   late Future<List<Map<String, dynamic>>> _announcementsFuture;
 
   @override
@@ -22,6 +23,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
     super.initState();
     _announcementsFuture = fetchAnnouncements();
   }
+
 
   void _refreshAnnouncements() {
     setState(() {
@@ -73,6 +75,17 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
 
       final now = DateTime.now();
       final timestamp = Timestamp.fromDate(now);
+      late String username = "";
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      final db = FirebaseFirestore.instance;
+      final docRef = db.collection("user").doc(uid);
+      docRef.get().then(
+            (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          username = data["name"];
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
 
       final announcementRef = await FirebaseFirestore.instance
           .collection('organizations')
@@ -82,6 +95,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
         'description': description,
         'url': url,
         'timestamp': timestamp,
+        'postedBy': username,
       });
 
       await announcementRef.update({'id': announcementRef.id});
@@ -160,6 +174,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
       body: Column(
         children: [
           Text("Announcements", style: mytextmed),
+          const SizedBox(height: 10),
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: _announcementsFuture,
@@ -188,25 +203,46 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                     final timestamp = item['timestamp'] as Timestamp?;
                     final date = timestamp?.toDate();
                     final announceUID = item['id'];
+                    final postedBy = item['postedBy'] ?? 'Unknowner';
 
-                    return ListTile(
-                      leading: imgUrl != null
-                          ? Image.asset('assets/images/person-icon.png')
-                          : null,
-                      title: Text(description ?? 'No description'),
-                      subtitle: Text(
-                        date != null
-                            ? DateFormat.yMMMd().add_jm().format(date)
-                            : 'No timestamp',
-                      ),
-                      trailing: GestureDetector(
-                        onTap: () async {
-                          final confirmed = await showDeleteConfirmationDialog(context, widget.orgName, announceUID);
-                          if (confirmed == true) {
-                            _refreshAnnouncements();
-                          }
-                        },
-                        child: const Icon(Icons.delete, color: Colors.red, size: 30),
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Card(
+                        //color: Colors.grey,
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: ListTile(
+                            leading: imgUrl != null
+                                ? Image.asset('assets/images/person-icon.png')
+                                : null,
+                            title: Text(description ?? 'No description'),
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                  date != null
+                                      ? DateFormat.yMMMd().add_jm().format(date)
+                                      : 'No timestamp',
+                                ),
+                                Text(
+                                  'Posted by: $postedBy',
+                                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            trailing: GestureDetector(
+                              onTap: () async {
+                                final confirmed = await showDeleteConfirmationDialog(context, widget.orgName, announceUID);
+                                if (confirmed == true) {
+                                  _refreshAnnouncements();
+                                }
+                              },
+                              child: const Icon(Icons.delete, color: Colors.red, size: 30),
+                            ),
+                          ),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 15),
                       ),
                     );
                   },
@@ -255,6 +291,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                             });
                             _createAnnouncement(
                               widget.orgName,
+                              //postname,
                               nbloc,
                               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLn2vN-qAufnhM8t2e4OkZ6-m3Md6_Gk9B7g&s",
                             );
