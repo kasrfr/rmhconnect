@@ -105,11 +105,13 @@ class _AdminEventsState extends State<AdminEvents> {
       ),
 
       body: Center(
-          child: Column(
-              children: [
-                Text("Upcoming Events", style: mytextmed),
-                AdminGetEvents(orgName: widget.orgName)
-              ]
+          child: SingleChildScrollView(
+            child: Column(
+                children: [
+                  Text("Upcoming Events", style: mytextmed),
+                  AdminGetEvents(orgName: widget.orgName)
+                ]
+            ),
           )
       ),
       floatingActionButton: FloatingActionButton(

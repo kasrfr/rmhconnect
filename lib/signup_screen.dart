@@ -26,6 +26,7 @@ class _SignupPageState extends State<SignupPage> {
   bool isLoading = true;
   String? valueOrg;
   String name = '';
+  String error = '';
 
   @override
   void initState(){
@@ -165,6 +166,9 @@ class _SignupPageState extends State<SignupPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          error = '';
+                        });
                         try{
                           final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                             email: email,
@@ -192,9 +196,8 @@ class _SignupPageState extends State<SignupPage> {
                             Navigator.pushReplacementNamed(context, '/navigation_screen');
                           }
                         }
-                        catch(e, stackTrace) {
-                          print("Error: $e");
-                          print("Stack Trace: $stackTrace");
+                        catch(e) {
+                          setState(() { error = e.toString(); });
                         }
                       }
                     },
@@ -220,7 +223,11 @@ class _SignupPageState extends State<SignupPage> {
                           )
                       )
                   )
-                )
+                ),
+                if (error.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(error, style: TextStyle(color: Colors.red)),
+                ],
               ],
             ),
           )
