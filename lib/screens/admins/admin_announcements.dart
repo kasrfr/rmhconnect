@@ -209,7 +209,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Card(
-                        //color: Colors.grey,
+                        color: Color(0xFFEFEBEB),
                         elevation: 5,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),

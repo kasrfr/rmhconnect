@@ -94,14 +94,26 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                       final timestamp = item['timestamp'] as Timestamp?;
                       final date = timestamp?.toDate();
                   
-                      return ListTile(
-                        title: Text(description ?? 'No description'),
-                        subtitle: Text(
-                          date != null
-                              ? DateFormat.yMMMd().add_jm().format(date)
-                              : 'No timestamp',
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Card(
+                          color: Color(0xFFEFEBEB),
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            child: ListTile(
+
+                              title: Text(description ?? 'No description'),
+                              subtitle: Text(
+                                date != null
+                                    ? DateFormat.yMMMd().add_jm().format(date)
+                                    : 'No timestamp',
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                          margin: const EdgeInsets.symmetric(vertical: 15),
                         ),
-                        onTap: () {},
                       );
                     },
                   ),
