@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rmhconnect/constants.dart';
 
 class Profilephoto extends StatelessWidget {
   final String pfp;
@@ -10,7 +11,7 @@ class Profilephoto extends StatelessWidget {
       radius: 50,
       // backgroundImage: NetworkImage(pfp),
       backgroundImage: AssetImage(pfp),
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
     );
   }
 }
