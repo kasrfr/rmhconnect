@@ -14,6 +14,9 @@ class AdminEvents extends StatefulWidget {
 }
 
 class _AdminEventsState extends State<AdminEvents> {
+
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController descripcontrol = TextEditingController();
 
@@ -104,15 +107,13 @@ class _AdminEventsState extends State<AdminEvents> {
         centerTitle: true,
       ),
 
-      body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-                children: [
-                  Text("Upcoming Events", style: mytextmed),
-                  AdminGetEvents(orgName: widget.orgName)
-                ]
-            ),
-          )
+      body: SingleChildScrollView(
+        child: Column(
+            children: [
+              Text("Upcoming Events", style: mytextmed),
+              AdminGetEvents(orgName: widget.orgName)
+            ]
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: backgroundColor,
@@ -124,96 +125,118 @@ class _AdminEventsState extends State<AdminEvents> {
                 builder: (BuildContext context, void Function(void Function()) setDialogState) {
                   return AlertDialog(
                     title: Text("Create New Event"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: namecontrol,
-                          decoration: InputDecoration(
-                            labelText: "New Event Name",
+                    content: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: namecontrol,
+                            decoration: InputDecoration(
+                              labelText: "New Event Name",
+                            ),
+                            validator: (String? eventnamevalue){
+                              if (eventnamevalue == null || eventnamevalue.isEmpty) {
+                                return 'Please enter a screen name';
+                              }
+                              return null;
+                            },
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextButton.icon(
-                                onPressed: () async {
-                                  final picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: _selectedDate,
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime.now().add(Duration(days: 365)),
-                                  );
-                                  if (picked != null) {
-                                    setState(() {
-                                      _selectedDate = picked;
-                                    });
-                                    setDialogState(() {});
-                                  }
-                                },
-                                icon: Icon(Icons.calendar_today),
-                                label: Text(
-                                  DateFormat('MMM d, yyyy').format(_selectedDate),
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton.icon(
+                                  onPressed: () async {
+                                    final picked = await showDatePicker(
+                                      context: context,
+                                      initialDate: _selectedDate,
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime.now().add(Duration(days: 365)),
+                                    );
+                                    if (picked != null) {
+                                      setState(() {
+                                        _selectedDate = picked;
+                                      });
+                                      setDialogState(() {});
+                                    }
+                                  },
+                                  icon: Icon(Icons.calendar_today),
+                                  label: Text(
+                                    DateFormat('MMM d, yyyy').format(_selectedDate),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: TextButton.icon(
-                                onPressed: () async {
-                                  final picked = await showTimePicker(
-                                    context: context,
-                                    initialTime: _selectedTime,
-                                  );
-                                  if (picked != null) {
-                                    setState(() {
-                                      _selectedTime = picked;
-                                    });
-                                    setDialogState(() {}); // Force dialog to rebuild
-                                  }
-                                },
-                                icon: Icon(Icons.access_time),
-                                label: Text(_selectedTime.format(context)),
+                              Expanded(
+                                child: TextButton.icon(
+                                  onPressed: () async {
+                                    final picked = await showTimePicker(
+                                      context: context,
+                                      initialTime: _selectedTime,
+                                    );
+                                    if (picked != null) {
+                                      setState(() {
+                                        _selectedTime = picked;
+                                      });
+                                      setDialogState(() {}); // Force dialog to rebuild
+                                    }
+                                  },
+                                  icon: Icon(Icons.access_time),
+                                  label: Text(_selectedTime.format(context)),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: descripcontrol,
-                          decoration: InputDecoration(
-                            labelText: "New Event Location",
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Spacer(),
-                            OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                namecontrol.clear();
-                                descripcontrol.clear();
-                              },
-                              child: Text("Cancel"),
+                          SizedBox(height: 20),
+                          TextFormField(
+                            controller: descripcontrol,
+                            decoration: InputDecoration(
+                              labelText: "New Event Location",
                             ),
-                            SizedBox(width: 20),
-                            OutlinedButton(
-                              onPressed: () {
-                                setState(() {
-                                  nbname = namecontrol.text;
-                                  nbloc = descripcontrol.text;
+                            validator: (String? eventdescripvalue) {
+                              if (eventdescripvalue == null ||
+                                  eventdescripvalue.isEmpty) {
+                                return 'Please enter a screen name';
+                              }
+                              return null;
+                            }
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Spacer(),
+                              OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
                                   namecontrol.clear();
                                   descripcontrol.clear();
-                                });
-                                _createEvents(widget.orgName, nbname, nbloc, _selectedDate, _selectedTime);
-                                Navigator.pop(context);
-                              },
-                              child: Text("Create"),
-                            ),
-                          ],
-                        )
-                      ],
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              SizedBox(width: 20),
+                              OutlinedButton(
+                                onPressed: () {
+                                  if(_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      nbname = namecontrol.text;
+                                      nbloc = descripcontrol.text;
+                                      namecontrol.clear();
+                                      descripcontrol.clear();
+                                    });
+                                    _createEvents(widget.orgName, nbname, nbloc,
+                                        _selectedDate, _selectedTime);
+                                    Navigator.pop(context);
+                                  }
+                                  else{
+                                    print("error");
+                                  }
+                                },
+                                child: Text("Create"),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
