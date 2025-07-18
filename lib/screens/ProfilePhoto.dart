@@ -11,7 +11,7 @@ class Profilephoto extends StatelessWidget {
       radius: 50,
       // backgroundImage: NetworkImage(pfp),
       backgroundImage: AssetImage(pfp),
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor.withOpacity(0.2),
     );
   }
 }

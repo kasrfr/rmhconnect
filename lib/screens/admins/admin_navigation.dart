@@ -43,7 +43,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
         showSelectedLabels: true,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_box), label: "Branches"),
+          BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined), label: "Branches"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),

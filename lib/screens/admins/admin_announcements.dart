@@ -17,6 +17,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
   late TextEditingController descripcontrol = TextEditingController();
   late String postname = "Unknowner";
   late Future<List<Map<String, dynamic>>> _announcementsFuture;
+  User? get user => FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
     return announcementsSnapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  void _createAnnouncement(String orgName, String description, String url) async {
+  Future<void> _createAnnouncement(String orgName, String description, String url) async {
     if (description.trim().isEmpty || url.trim().isEmpty) {
       print("Description and URL cannot be empty.");
       return; // Stop the function if either is empty
@@ -75,17 +76,11 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
 
       final now = DateTime.now();
       final timestamp = Timestamp.fromDate(now);
-      late String username = "";
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      final db = FirebaseFirestore.instance;
-      final docRef = db.collection("user").doc(uid);
-      docRef.get().then(
-            (DocumentSnapshot doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          username = data["name"];
-        },
-        onError: (e) => print("Error getting document: $e"),
-      );
+
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
 
       final announcementRef = await FirebaseFirestore.instance
           .collection('organizations')
@@ -95,7 +90,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
         'description': description,
         'url': url,
         'timestamp': timestamp,
-        'postedBy': username,
+        'postedBy': userDoc['name'] ?? "unknown",
       });
 
       await announcementRef.update({'id': announcementRef.id});
@@ -282,14 +277,14 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                         ),
                         const SizedBox(width: 20),
                         OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               nbname = namecontrol.text;
                               nbloc = descripcontrol.text;
                               namecontrol.clear();
                               descripcontrol.clear();
                             });
-                            _createAnnouncement(
+                            await _createAnnouncement(
                               widget.orgName,
                               //postname,
                               nbloc,

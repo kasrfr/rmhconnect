@@ -31,7 +31,7 @@ class _AdminEventsState extends State<AdminEvents> {
     _selectedTime = TimeOfDay(hour: now.hour, minute: now.minute);
   }
 
-  void _createEvents(String orgName, String title, String description, DateTime date, TimeOfDay time) async {
+  Future<void> _createEvents(String orgName, String title, String description, DateTime date, TimeOfDay time) async {
     try {
       final orgQuery = await FirebaseFirestore.instance
           .collection('organizations')
@@ -215,7 +215,7 @@ class _AdminEventsState extends State<AdminEvents> {
                               ),
                               SizedBox(width: 20),
                               OutlinedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if(_formKey.currentState!.validate()) {
                                     setState(() {
                                       nbname = namecontrol.text;
@@ -223,7 +223,7 @@ class _AdminEventsState extends State<AdminEvents> {
                                       namecontrol.clear();
                                       descripcontrol.clear();
                                     });
-                                    _createEvents(widget.orgName, nbname, nbloc,
+                                    await _createEvents(widget.orgName, nbname, nbloc,
                                         _selectedDate, _selectedTime);
                                     Navigator.pop(context);
                                   }
