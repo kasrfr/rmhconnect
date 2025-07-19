@@ -144,7 +144,7 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
             centerTitle: true,
             actions: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,30,0),
+                padding: const EdgeInsets.fromLTRB(0,0,30,5),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -153,7 +153,7 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
                         height: 40,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Color(0xFFE37575)
+                            color: Colors.blue,
                         )
                     ),
                     IconButton(icon: Icon(Icons.settings), onPressed: _showSettingsMenu),
@@ -209,7 +209,7 @@ class _SuperAdminProfileState extends State<SuperAdminProfile> {
                 }
             );
           },
-          child: Icon(Icons.add),
+          child: Icon(Icons.add, color: Colors.white),
         ),
         body: Column(
             children:[

@@ -23,7 +23,7 @@ class _AdminHomeState extends State<AdminHome> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
-        title: Text("RMHC Connect", style: titling),
+        title: Text("Charity Connect", style: titling),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

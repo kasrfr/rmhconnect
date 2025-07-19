@@ -101,7 +101,7 @@ class OrgGetInfo extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Card(
-                              color: Color(0xFFFFDEDE),
+                              color: Colors.blue,
                               elevation: 2,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
