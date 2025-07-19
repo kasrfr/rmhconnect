@@ -7,6 +7,7 @@ import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
 
 class memberlist extends StatelessWidget {
+
   final String pfp;
   final String name;
   final String role;

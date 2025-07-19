@@ -10,6 +10,9 @@ class SuperAdminBranches extends StatefulWidget {
 }
 
 class _SuperAdminBranchesState extends State<SuperAdminBranches> {
+
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController loccontrol = TextEditingController();
 
