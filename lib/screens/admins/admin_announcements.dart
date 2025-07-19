@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminAnnouncements extends StatefulWidget {
   final String orgName;
@@ -14,14 +15,16 @@ class AdminAnnouncements extends StatefulWidget {
 class _AdminAnnouncementsState extends State<AdminAnnouncements> {
   late TextEditingController namecontrol = TextEditingController();
   late TextEditingController descripcontrol = TextEditingController();
-
+  late String postname = "Unknowner";
   late Future<List<Map<String, dynamic>>> _announcementsFuture;
+  User? get user => FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     _announcementsFuture = fetchAnnouncements();
   }
+
 
   void _refreshAnnouncements() {
     setState(() {
@@ -52,7 +55,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
     return announcementsSnapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  void _createAnnouncement(String orgName, String description, String url) async {
+  Future<void> _createAnnouncement(String orgName, String description, String url) async {
     if (description.trim().isEmpty || url.trim().isEmpty) {
       print("Description and URL cannot be empty.");
       return; // Stop the function if either is empty
@@ -74,6 +77,11 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
       final now = DateTime.now();
       final timestamp = Timestamp.fromDate(now);
 
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
+
       final announcementRef = await FirebaseFirestore.instance
           .collection('organizations')
           .doc(orgDocId)
@@ -82,6 +90,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
         'description': description,
         'url': url,
         'timestamp': timestamp,
+        'postedBy': userDoc['name'] ?? "unknown",
       });
 
       await announcementRef.update({'id': announcementRef.id});
@@ -160,6 +169,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
       body: Column(
         children: [
           Text("Announcements", style: mytextmed),
+          const SizedBox(height: 10),
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: _announcementsFuture,
@@ -188,25 +198,46 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                     final timestamp = item['timestamp'] as Timestamp?;
                     final date = timestamp?.toDate();
                     final announceUID = item['id'];
+                    final postedBy = item['postedBy'] ?? 'Unknowner';
 
-                    return ListTile(
-                      leading: imgUrl != null
-                          ? Image.asset('assets/images/person-icon.png')
-                          : null,
-                      title: Text(description ?? 'No description'),
-                      subtitle: Text(
-                        date != null
-                            ? DateFormat.yMMMd().add_jm().format(date)
-                            : 'No timestamp',
-                      ),
-                      trailing: GestureDetector(
-                        onTap: () async {
-                          final confirmed = await showDeleteConfirmationDialog(context, widget.orgName, announceUID);
-                          if (confirmed == true) {
-                            _refreshAnnouncements();
-                          }
-                        },
-                        child: const Icon(Icons.delete, color: Colors.red, size: 30),
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Card(
+                        color: Color(0xFFEFEBEB),
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: ListTile(
+                            leading: imgUrl != null
+                                ? Image.asset('assets/images/person-icon.png')
+                                : null,
+                            title: Text(description ?? 'No description'),
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                  date != null
+                                      ? DateFormat.yMMMd().add_jm().format(date)
+                                      : 'No timestamp',
+                                ),
+                                Text(
+                                  'Posted by: $postedBy',
+                                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            trailing: GestureDetector(
+                              onTap: () async {
+                                final confirmed = await showDeleteConfirmationDialog(context, widget.orgName, announceUID);
+                                if (confirmed == true) {
+                                  _refreshAnnouncements();
+                                }
+                              },
+                              child: const Icon(Icons.delete, color: Colors.red, size: 30),
+                            ),
+                          ),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 15),
                       ),
                     );
                   },
@@ -246,15 +277,16 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                         ),
                         const SizedBox(width: 20),
                         OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               nbname = namecontrol.text;
                               nbloc = descripcontrol.text;
                               namecontrol.clear();
                               descripcontrol.clear();
                             });
-                            _createAnnouncement(
+                            await _createAnnouncement(
                               widget.orgName,
+                              //postname,
                               nbloc,
                               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLn2vN-qAufnhM8t2e4OkZ6-m3Md6_Gk9B7g&s",
                             );

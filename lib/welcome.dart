@@ -24,6 +24,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double deviceHeight = size.height;
+    double testOGHeight = 924;
     return Scaffold(
       body: SafeArea(
           child: Center(
@@ -31,7 +34,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Logo(height: 350),
+                    child: Logo(height: (deviceHeight*350/testOGHeight)),//350),
                   ),
                   Text("RMHC CONNECT", style: mytext),
                   SizedBox(
