@@ -17,7 +17,7 @@ class _ResidentsHomeState extends State<ResidentsHome> {
       appBar: AppBar(
           backgroundColor: backgroundColor,
           automaticallyImplyLeading: false,
-          title: Text("RMHC CONNECT", style: titling),
+          title: Text("CHARITY CONNECT", style: titling),
           centerTitle: true,
           // actions: [
           //   Padding(

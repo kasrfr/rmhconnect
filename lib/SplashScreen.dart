@@ -85,7 +85,7 @@ TextStyle titleStyle(context){
                     softWrap: true,
                     style: titleStyle(context)
                 ),
-                Logo(height: resizedHeight(context, 350)),
+                Image.asset("assets/images/logoclear.png", height: 450),
                 Spacer(flex: resizedHeight(context, 1).round()),
                 Padding(
                   padding: /*const*/ EdgeInsets.symmetric(vertical: resizedHeight(context, 50), horizontal: 0),

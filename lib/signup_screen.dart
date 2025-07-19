@@ -87,7 +87,7 @@ class _SignupPageState extends State<SignupPage> {
                 TextFormField(
                     controller: _nameController,
                     decoration: const InputDecoration(
-                        helperText: 'Name'
+                        labelText: 'Name'
                     ),
                     validator: (String? name) {
                       if (name == null || name.isEmpty) {
@@ -97,11 +97,11 @@ class _SignupPageState extends State<SignupPage> {
                     },
                     onChanged: (val) => setState(() => name = val)
                 ),
-
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
-                    helperText: 'Email'
+                    labelText: 'Email'
                   ),
                   validator: (String? email) {
                     if (email == null || email.isEmpty) {
@@ -111,11 +111,11 @@ class _SignupPageState extends State<SignupPage> {
                   },
                   onChanged: (val) => setState(() => email = val)
                 ),
-        
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                    helperText: 'Password'
+                    labelText: 'Password'
                   ),
                   obscureText: true,
                   validator: (String? password) {
@@ -125,10 +125,11 @@ class _SignupPageState extends State<SignupPage> {
                     return null;
                   },
                 ),
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _confirmPasswordController,
                   decoration: const InputDecoration(
-                    helperText: 'Confirm password'
+                    labelText: 'Confirm password'
                   ),
                   obscureText: true,
                   validator: (String? password) {
@@ -139,14 +140,15 @@ class _SignupPageState extends State<SignupPage> {
                   },
                   onChanged: (val) => setState(() => password = val)
                 ),
-
-
-
-
                 SizedBox(
-                  height: 25
+                  height: 35
                 ),
                 DropdownSearch<String>(
+                  decoratorProps: DropDownDecoratorProps(
+                    decoration: InputDecoration(
+                      labelText: 'Choose a branch'
+                    )
+                  ),
                   items: (f, cs) => orgNames,
                     popupProps: PopupProps.menu(
                     fit: FlexFit.loose
@@ -163,59 +165,64 @@ class _SignupPageState extends State<SignupPage> {
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          error = '';
-                        });
-                        try{
-                          final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          );
-                          final roleDoc = await FirebaseFirestore.instance
-                            .collection('admins')
-                            .where('email', isEqualTo: email)
-                            .limit(1)
-                            .get();
-                          role = (roleDoc.docs.isNotEmpty) ? 'admin': 'patient';
-                          await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(credential.user!.uid)
-                            .set({
-                              'email': email,
-                              'role': role,
-                              'location': valueOrg,
-                              'name': name,
-                            });
-                          if (role == 'admin') {
-                            Navigator.pushReplacementNamed(context, '/admin_navigation');
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            error = '';
+                          });
+                          try{
+                            final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            );
+                            final roleDoc = await FirebaseFirestore.instance
+                              .collection('admins')
+                              .where('email', isEqualTo: email)
+                              .limit(1)
+                              .get();
+                            role = (roleDoc.docs.isNotEmpty) ? 'admin': 'patient';
+                            await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(credential.user!.uid)
+                              .set({
+                                'email': email,
+                                'role': role,
+                                'location': valueOrg,
+                                'name': name,
+                              });
+                            if (role == 'admin') {
+                              Navigator.pushReplacementNamed(context, '/admin_navigation');
+                            }
+                            else {
+                              Navigator.pushReplacementNamed(context, '/navigation_screen');
+                            }
                           }
-                          else {
-                            Navigator.pushReplacementNamed(context, '/navigation_screen');
+                          catch(e) {
+                            setState(() { error = e.toString(); });
                           }
                         }
-                        catch(e) {
-                          setState(() { error = e.toString(); });
-                        }
-                      }
-                    },
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue
-                  ),
-                    child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            color: Colors.white
-                        )
+                      },
+                    style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue
+                    ),
+                      child: const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                              color: Colors.white
+                          )
+                      ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
                   child: TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
                     child: const Text(
                       "Not your first time? Log in!",
                           style: TextStyle(
