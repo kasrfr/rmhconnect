@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/theme.dart';
 
 class OrgGetInfo extends StatelessWidget {
   const OrgGetInfo({super.key});
@@ -101,7 +102,7 @@ class OrgGetInfo extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Card(
-                              color: Color(0xFFFFDEDE),
+                              color: CharityConnectTheme.cardColor,
                               elevation: 2,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),

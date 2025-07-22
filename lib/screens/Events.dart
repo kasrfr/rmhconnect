@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/theme.dart';
 
 class Events extends StatelessWidget {
   final String eventID;
@@ -61,7 +62,7 @@ class Events extends StatelessWidget {
               await deleteEventByUid(orgName, uid);
               Navigator.of(context).pop(true);
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: Colors.blue),
             child: const Text("Delete event"),
           ),
         ],
@@ -81,7 +82,8 @@ class Events extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
-            color: Color(0xFFFFDEDE),
+            color: CharityConnectTheme.cardColor,
+            shadowColor: Colors.black,
             elevation: 8,
             child:ExpansionTile(
                 leading: Icon(Icons.calendar_today_rounded),

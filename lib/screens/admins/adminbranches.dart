@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
+import 'package:rmhconnect/theme.dart';
 
 class Adminbranches extends StatefulWidget {
   const Adminbranches({super.key});
@@ -78,9 +79,9 @@ class _AdminbranchesState extends State<Adminbranches> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      color: const Color(0xFFFFDEDE),
+                      color: CharityConnectTheme.cardColor,
                       child: ListTile(
-                        leading: const Icon(Icons.home, color: Colors.red),
+                        leading: const Icon(Icons.home, color: CharityConnectTheme.primaryColor),
                         title: Text(nbname, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                         subtitle: Text(nbloc, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
                       ),

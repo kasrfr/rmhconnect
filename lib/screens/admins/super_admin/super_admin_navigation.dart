@@ -11,6 +11,8 @@ import 'package:rmhconnect/screens/admins/super_admin/super_admin_profile.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
 
+import '../../../theme.dart';
+
 class SuperAdminNavigation extends StatefulWidget {
   const SuperAdminNavigation({super.key});
 
@@ -41,7 +43,7 @@ class _SuperAdminNavigationState extends State<SuperAdminNavigation> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: backgroundColor,
+        selectedItemColor: CharityConnectTheme.primaryColor,
         showSelectedLabels: true,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),

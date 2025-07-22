@@ -7,6 +7,7 @@ import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
 import 'package:rmhconnect/screens/admins/memberlist.dart';
+import 'package:rmhconnect/theme.dart';
 
 
 class AdminProfile extends StatefulWidget {
@@ -142,7 +143,7 @@ class _AdminProfileState extends State<AdminProfile> {
                       height: 40,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFFE37575)
+                          color: Colors.blue
                       )
                   ),
                   IconButton(icon: Icon(Icons.settings), onPressed: _showSettingsMenu),

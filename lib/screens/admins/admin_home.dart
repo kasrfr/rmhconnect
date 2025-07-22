@@ -5,6 +5,7 @@ import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
+import 'package:rmhconnect/theme.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -23,7 +24,7 @@ class _AdminHomeState extends State<AdminHome> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
-        title: Text("RMHC Connect", style: titling),
+        title: Text("Charity Connect", style: titling),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

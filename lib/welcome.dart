@@ -32,14 +32,11 @@ class _WelcomePageState extends State<WelcomePage> {
           child: Center(
             child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Logo(height: (deviceHeight*350/testOGHeight)),//350),
-                  ),
-                  Text("RMHC CONNECT", style: mytext),
+                  Image.asset("assets/images/logoclear.png", height: 450),
+                  //ext("CHARITY CONNECT", style: mytext),
                   SizedBox(
                     width: 200,
-                    height: 20,
+                    //height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -50,7 +47,10 @@ class _WelcomePageState extends State<WelcomePage> {
                         onPressed: () {
                           Navigator.pushNamed(context, '/login');
                         },
-                        child: Text("Login"),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text("Login", style: TextStyle(fontSize:20)),
+                        ),
                       )
                     ),
                   ),
@@ -63,7 +63,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/signup');
                           },
-                          child: Text("Signup"),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical:(8.0)),
+                            child: Text("Signup", style: TextStyle(fontSize:20)),
+                          ),
                         )
                     ),
                   )

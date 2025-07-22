@@ -26,7 +26,7 @@ class Logo extends StatelessWidget {
           borderRadius: BorderRadius.circular(resizedHeight(context, borderRadius)),
           color: Colors.white,
           image: DecorationImage(
-                image: AssetImage("assets/images/rmhc_logo.png"),
+                image: AssetImage("assets/images/logoclear.png"),
 
                 fit: BoxFit.contain//cover
           )

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/theme.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -65,33 +66,20 @@ TextStyle titleStyle(context){
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: CharityConnectTheme.backgroundColor,
       body:
         SafeArea(
           child: Center(
             child: Column(
               //mainAxisAlignment: MainAxisAlignment.center,
               children:[
-                Padding(
-                  padding: /*const*/ EdgeInsets.only(top: resizedHeight(context, 75)),
-                  child: Text(
-                    "Ronald McDonald",
-                        softWrap: true,
-                        style: titleStyle(context)
-                  ),
-                ),
-                Text(
-                    "House Charities",
-                    softWrap: true,
-                    style: titleStyle(context)
-                ),
-                Logo(height: resizedHeight(context, 350)),
+                Image.asset("assets/images/logoclear.png", height: 450),
                 Spacer(flex: resizedHeight(context, 1).round()),
                 Padding(
                   padding: /*const*/ EdgeInsets.symmetric(vertical: resizedHeight(context, 50), horizontal: 0),
                   child: Text(
                       "Version 1.0.0",
-                      style: versionStyle(context)
+                      style: versionStyley
                   ),
                 ),
               ]

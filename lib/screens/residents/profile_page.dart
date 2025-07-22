@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 40,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFFE37575)
+                          color: Colors.blue,
                       )
                   ),
                   IconButton(icon: Icon(Icons.settings), onPressed: _showSettingsMenu),
