@@ -1,5 +1,6 @@
 import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:rmhconnect/theme.dart';
 
 class SuperAdminBranchDetails extends StatefulWidget {
   final String name;
@@ -32,7 +33,7 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25.0),
                           ),
-                          color: const Color(0xFFFFDEDE),
+                          color: CharityConnectTheme.cardColor,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                             child: Column(
@@ -67,13 +68,13 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
-                              color: const Color(0xFFFFDEDE),
+                              color: CharityConnectTheme.cardColor,
                               child: Padding(
                                 padding: const EdgeInsets.all(32.0),
                                 child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.check, color: Colors.red, size: 40),
+                                      Icon(Icons.check, color: CharityConnectTheme.primaryColor, size: 40),
                                       SizedBox(height: 20),
                                       Text("Announcements", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                     ]
@@ -96,15 +97,15 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
-                              color: const Color(0xFFFFDEDE),
+                              color: CharityConnectTheme.cardColor,
                               child: Padding(
                                 padding: const EdgeInsets.all(32.0),
                                 child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.calendar_month, color: Colors.red, size: 40),
+                                      Icon(Icons.calendar_month, color: CharityConnectTheme.primaryColor, size: 40),
                                       SizedBox(height: 20),
-                                      Text("          Events         ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                      Text("Events", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                     ]
                                 ),
                               )
@@ -128,14 +129,14 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),
                         ),
-                        color: const Color(0xFFFFDEDE),
+                        color: CharityConnectTheme.cardColor,
                         child: Padding(
                           padding: const EdgeInsets.all(32.0),
                           child: Column(
                               children: [
-                                Icon(Icons.group, color: Colors.red, size: 40),
+                                Icon(Icons.group, color: CharityConnectTheme.primaryColor, size: 40),
                                 SizedBox(height: 20),
-                                Text("        Members       ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text("Members", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                               ]
                           ),
                         )
