@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/theme.dart';
 
 
 class AnnouncementsPage extends StatefulWidget {
@@ -97,7 +98,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Card(
-                          color: Color(0xFFEFEBEB),
+                          color: CharityConnectTheme.cardColor,
                           elevation: 5,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12.0),

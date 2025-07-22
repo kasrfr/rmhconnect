@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rmhconnect/theme.dart';
 
 class AdminAnnouncements extends StatefulWidget {
   final String orgName;
@@ -204,7 +205,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Card(
-                        color: Color(0xFFEFEBEB),
+                        color: CharityConnectTheme.cardColor,
                         elevation: 5,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -303,7 +304,7 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
             },
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }

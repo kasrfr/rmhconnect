@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/logo.dart';
+import 'package:rmhconnect/theme.dart';
 
 class SuperAdminMemberlist extends StatelessWidget {
   final String uid;
@@ -64,7 +65,7 @@ class SuperAdminMemberlist extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
-        color: const Color(0xFFFFDEDE),
+        color: CharityConnectTheme.cardColor,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

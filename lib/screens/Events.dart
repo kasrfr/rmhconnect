@@ -82,7 +82,7 @@ class Events extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
-            color: CharityConnectTheme.primaryColor,
+            color: CharityConnectTheme.cardColor,
             shadowColor: Colors.black,
             elevation: 8,
             child:ExpansionTile(
@@ -93,7 +93,7 @@ class Events extends StatelessWidget {
                   onTap: () async {
                     await showDeleteConfirmationDialog(context, orgName, eventID);
                   },
-                  child: const Icon(Icons.delete, color: Colors.blue, size: 30),
+                  child: const Icon(Icons.delete, color: Colors.red, size: 30),
                 ),
                 children: [
                   ListTile(

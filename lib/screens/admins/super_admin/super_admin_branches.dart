@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:rmhconnect/theme.dart';
 
 class SuperAdminBranches extends StatefulWidget {
   const SuperAdminBranches({super.key});
@@ -136,7 +137,7 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
                 }
             );
           },
-          child: Icon(Icons.add),
+          child: Icon(Icons.add, color: Colors.white,),
         ),
         body: Center(
             child: Padding(
@@ -176,9 +177,9 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25.0),
                           ),
-                          color: const Color(0xFFFFDEDE),
+                          color: CharityConnectTheme.cardColor,
                           child: ListTile(
-                            leading: const Icon(Icons.home, color: Colors.red),
+                            leading: const Icon(Icons.home, color: CharityConnectTheme.primaryColor),
                             title: Text(nbname, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                             subtitle: Text(nbloc, style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic)),
                             trailing: GestureDetector(

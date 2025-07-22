@@ -3,6 +3,7 @@ import 'package:rmhconnect/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/Events.dart';
 import 'package:rmhconnect/screens/logo.dart';
+import 'package:rmhconnect/theme.dart';
 
 class AdminBranchDeatils extends StatefulWidget {
   final String name;
@@ -23,11 +24,11 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
         centerTitle: true,
       ),
       body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Center(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+          child: Column(
+            children: [
+              Center(
                 child: SizedBox(
                   width: double.infinity, // or a fixed value like 300 if needed
                   child: Card(
@@ -35,7 +36,7 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    color: const Color(0xFFFFDEDE),
+                    color: CharityConnectTheme.cardColor,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       child: Column(
@@ -49,102 +50,107 @@ class _AdminBranchDeatilsState extends State<AdminBranchDeatils> {
                   ),
                 ),
               ),
-            ),
 
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(
-                      context,
-                      '/admin_announcements',
-                      arguments: {
-                        'orgName': widget.name,
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(
+                          context,
+                          '/admin_announcements',
+                          arguments: {
+                            'orgName': widget.name,
+                          },
+                        );
                       },
-                    );
-                  },
-                  child: Card(
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                      child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          color: CharityConnectTheme.cardColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.check, color: CharityConnectTheme.primaryColor, size: 40),
+                                  SizedBox(height: 20),
+                                  Text("Announcements", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                ]
+                            ),
+                          )
                       ),
-                      color: const Color(0xFFFFDEDE),
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.check, color: Colors.red, size: 40),
-                              SizedBox(height: 20),
-                              Text("Announcements", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            ]
-                        ),
-                      )
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(
-                      context,
-                      '/admin_events',
-                      arguments: {
-                        'orgName': widget.name,
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(
+                          context,
+                          '/admin_events',
+                          arguments: {
+                            'orgName': widget.name,
+                          },
+                        );
                       },
-                    );
-                  },
-                  child: Card(
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                      child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          color: CharityConnectTheme.cardColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.calendar_month, color: CharityConnectTheme.primaryColor, size: 40),
+                                  SizedBox(height: 20),
+                                  Text("Events", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                ]
+                            ),
+                          )
                       ),
-                      color: const Color(0xFFFFDEDE),
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.calendar_month, color: Colors.red, size: 40),
-                              SizedBox(height: 20),
-                              Text("          Events         ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            ]
-                        ),
-                      )
+                    ),
                   ),
-                ),
-              ]
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/admin_members',
-                  arguments: {
-                    'orgName': widget.name,
-                  },
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                color: const Color(0xFFFFDEDE),
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.group, color: Colors.red, size: 40),
-                      SizedBox(height: 20),
-                      Text("        Members       ", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                    ]
-                  ),
-                )
+                ]
               ),
-            )
-          ]
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/admin_members',
+                    arguments: {
+                      'orgName': widget.name,
+                    },
+                  );
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  color: CharityConnectTheme.cardColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 70),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.group, color: CharityConnectTheme.primaryColor, size: 40),
+                        SizedBox(height: 20),
+                        Text("Members", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      ]
+                    ),
+                  )
+                ),
+              )
+            ]
+          ),
         )
       )
     );
