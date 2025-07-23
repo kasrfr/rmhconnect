@@ -21,7 +21,7 @@ class SuperAdminMemberlist extends StatelessWidget {
       final docSnapshot = await userDocRef.get();
 
       if (docSnapshot.exists) {
-        await userDocRef.update({'role': 'patient'});
+        await userDocRef.update({'role': 'user'});
         print("User with UID '$uid' has been demoted to patient.");
       } else {
         print("No user found with UID: $uid");

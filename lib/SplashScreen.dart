@@ -49,7 +49,7 @@ TextStyle titleStyle(context){
           .collection('users')
           .doc(user.uid)
           .get();
-      final role = userDoc.data()?['role'] ?? 'patient';
+      final role = userDoc.data()?['role'] ?? 'user';
       if (role == 'admin') {
         Navigator.pushReplacementNamed(context, '/admin_navigation');
       } else if (role == 'super_admin') {

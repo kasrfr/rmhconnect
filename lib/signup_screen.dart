@@ -183,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
                               .where('email', isEqualTo: email)
                               .limit(1)
                               .get();
-                            role = (roleDoc.docs.isNotEmpty) ? 'admin': 'patient';
+                            role = (roleDoc.docs.isNotEmpty) ? 'admin': 'user';
                             await FirebaseFirestore.instance
                               .collection('users')
                               .doc(credential.user!.uid)
