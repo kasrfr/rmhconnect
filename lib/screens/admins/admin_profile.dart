@@ -186,7 +186,7 @@ class _AdminProfileState extends State<AdminProfile> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(25,0,0,0),
-                      child: Text("Current Branch: ", style: TextStyle(fontSize: 22)),
+                      child: Text("Current Charity: ", style: TextStyle(fontSize: 22)),
                     ),
                     SizedBox(width: 10),
 

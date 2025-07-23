@@ -146,7 +146,7 @@ class _SignupPageState extends State<SignupPage> {
                 DropdownSearch<String>(
                   decoratorProps: DropDownDecoratorProps(
                     decoration: InputDecoration(
-                      labelText: 'Choose a branch'
+                      labelText: 'Choose a Charity'
                     )
                   ),
                   items: (f, cs) => orgNames,

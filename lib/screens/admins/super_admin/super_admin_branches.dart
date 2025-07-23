@@ -21,7 +21,7 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
         'location': location,
       });
 
-      print('Branch "$name" at "$location" added successfully.');
+      print('Charity "$name" at "$location" added successfully.');
     } catch (e) {
       print('Failed to add branch: $e');
     }
@@ -38,12 +38,12 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
       }
 
       if (querySnapshot.docs.isEmpty) {
-        print("No branch found with name: $name");
+        print("No charity found with name: $name");
       } else {
-        print("Branch '$name' deleted successfully.");
+        print("Charity '$name' deleted successfully.");
       }
     } catch (e) {
-      print("Error deleting branch: $e");
+      print("Error deleting charity: $e");
     }
   }
 
@@ -52,7 +52,7 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Confirm Deletion"),
-        content: Text("Are you sure you want to permanently delete the branch '$branchName'?"),
+        content: Text("Are you sure you want to permanently delete the Charity '$branchName'?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -77,7 +77,7 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: backgroundColor,
-          title: Text("Branches", style: titling),
+          title: Text("Charities", style: titling),
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
@@ -87,21 +87,21 @@ class _SuperAdminBranchesState extends State<SuperAdminBranches> {
                 context: context,
                 builder: (BuildContext context){
                   return AlertDialog(
-                      title: Text("Create New Branch"),
+                      title: Text("Create New Charity"),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextField(
                             controller: namecontrol,
                             decoration: InputDecoration(
-                              labelText: "New Branch Name",
+                              labelText: "New Charity Name",
                             ),
                           ),
                           SizedBox(height: 20),
                           TextField(
                             controller: loccontrol,
                             decoration: InputDecoration(
-                              labelText: "New Branch Location",
+                              labelText: "New Charity Location",
                             ),
                           ),
                           SizedBox(height: 20),

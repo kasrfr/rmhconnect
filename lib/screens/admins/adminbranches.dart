@@ -38,7 +38,7 @@ class _AdminbranchesState extends State<Adminbranches> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
-        title: Text("Branches", style: titling),
+        title: Text("Chairities", style: titling),
         centerTitle: true,
       ),
       body: Center(

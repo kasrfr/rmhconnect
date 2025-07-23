@@ -15,11 +15,11 @@ late String role = "role";
 late String password = "password";
 late String email = "email";
 late String location = "location";
-late String nbname = "branch name";
-late String nbloc = "branch location";
+late String nbname = "charity name";
+late String nbloc = "charity location";
 late String nenme;
 late String nedscrp;
-late String cbname = "branch name current";
+late String cbname = "charity name current";
 late String nmname = "bob";
 late String nmrole = "role";
 

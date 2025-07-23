@@ -41,7 +41,6 @@ TextStyle titleStyle(context){
 
   Future<void> init() async{
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, '/welcome');
 
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {

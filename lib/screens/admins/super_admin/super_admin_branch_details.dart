@@ -17,7 +17,7 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: backgroundColor,
-          title: Text("Branch Details", style: titling),
+          title: Text("Charity Details", style: titling),
           centerTitle: true,
         ),
         body: Center(
