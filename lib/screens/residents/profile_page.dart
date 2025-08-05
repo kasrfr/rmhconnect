@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
+import 'package:rmhconnect/theme.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -58,6 +59,35 @@ class _ProfilePageState extends State<ProfilePage> {
 
   }
 
+  Future<String> _promptForPassword() async {
+    String password = '';
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+        return AlertDialog(
+          title: Text('Re-enter your password'),
+          content: TextField(
+            controller: controller,
+            obscureText: true,
+            decoration: InputDecoration(hintText: 'Password'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                password = controller.text;
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+    return password;
+  }
+
+
   Future<void> loadOrgNames() async {
     final snapshot =
     await FirebaseFirestore.instance.collection('organizations').get();
@@ -101,12 +131,28 @@ class _ProfilePageState extends State<ProfilePage> {
       await FirebaseAuth.instance.signOut();
       if (mounted) Navigator.pushReplacementNamed(context, '/welcome');
     } else if (action == 'delete') {
-      await user?.delete();
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user!.uid)
-          .delete();
-      if (mounted) Navigator.pushReplacementNamed(context, '/welcome');
+      try {
+        // Re-authenticate the user
+        final credential = EmailAuthProvider.credential(
+          email: user!.email!,
+          password: await _promptForPassword(), // You’ll implement this function
+        );
+        await user?.reauthenticateWithCredential(credential);
+
+        await user?.delete();
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .delete();
+
+        if (mounted) Navigator.pushReplacementNamed(context, '/welcome');
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete account. Try again.")),
+        );
+      }
+
     }
   }
 
