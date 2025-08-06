@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
+import 'package:rmhconnect/screens/residents/org_get_info_past.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
 import 'package:rmhconnect/theme.dart';
 
@@ -24,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool locationPressed = false;
   List<String> orgNames = [];
   bool isLoading = true;
+  bool showPastEvents = false;
 
   @override
   void initState(){
@@ -272,10 +274,48 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
                   child: Text("My Events", style: titlingblck),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //const Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      ElevatedButton(
+                          onPressed: (){
+                            setState((){
+                              showPastEvents = false;
+                            });
+                          },
+                          child: Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+                      ),
+                      ElevatedButton(
+                          onPressed: (){
+                            setState((){
+                              showPastEvents = true;
+
+                            });
+                          },
+                          child: Text('Past Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            // Force refresh
+                          });
+                        },
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ],
+                  ),
+                ),
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      OrgGetInfo()
+                      if(showPastEvents == false)
+                        OrgGetInfo()
+                      else
+                        OrgGetInfoPast()
                     ],
                   ),
                 )

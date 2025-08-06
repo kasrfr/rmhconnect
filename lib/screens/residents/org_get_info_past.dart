@@ -7,15 +7,16 @@ import 'package:rmhconnect/theme.dart';
 
 import 'event_detail_page.dart';
 
-class OrgGetInfo extends StatefulWidget {
-  const OrgGetInfo({super.key});
+class OrgGetInfoPast extends StatefulWidget {
+  const OrgGetInfoPast({super.key});
 
 
   @override
-  State<OrgGetInfo> createState() => _OrgGetInfoState();
+  State<OrgGetInfoPast> createState() => _OrgGetInfoState();
 }
 
-class _OrgGetInfoState extends State<OrgGetInfo> {
+class _OrgGetInfoState extends State<OrgGetInfoPast> {
+  bool showPastEvents = true;
 
   String _formatDateTime(Timestamp timestamp) {
     final date = timestamp.toDate();
@@ -34,7 +35,7 @@ class _OrgGetInfoState extends State<OrgGetInfo> {
             .collection('organizations')
             .doc(orgId)
             .collection('activities')
-            .where('dateTime', isGreaterThan: Timestamp.now())
+            .where('dateTime', isLessThanOrEqualTo: Timestamp.now())
             .orderBy('dateTime')
             .get();
 
@@ -155,78 +156,80 @@ class _OrgGetInfoState extends State<OrgGetInfo> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...activities.map((activity) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Card(
-                              color: CharityConnectTheme.cardColor,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                side: const BorderSide(
-                                  color: Colors.green,
-                                  width: 2,
+                          ...activities.map((activity) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Card(
+                                color: CharityConnectTheme.cardColor,
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: const BorderSide(
+                                    color: Colors.green,
+                                    width: 2,
+                                  ),
                                 ),
-                              ),
-                              margin: const EdgeInsets.only(bottom: 16),
-                              child: ListTile(
-                                leading: const Icon(Icons.check_circle, color: Colors.green),
-                                title: Text(activity['title'] ?? 'Activity'),
-                                subtitle: activity['dateTime'] != null
-                                    ? Text(_formatDateTime(activity['dateTime'] as Timestamp))
-                                    : null,
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: const Text(
-                                        'Joined',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: ListTile(
+                                  leading: const Icon(Icons.check_circle, color: Colors.green),
+                                  title: Text(activity['title'] ?? 'Activity'),
+                                  subtitle: activity['dateTime'] != null
+                                      ? Text(_formatDateTime(activity['dateTime'] as Timestamp))
+                                      : null,
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: const Text(
+                                          'Joined',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: const Icon(Icons.arrow_forward_ios),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => EventDetailPage(
-                                              eventId: activity['id'],
-                                              orgId: activity['orgID'],
-                                              eventData: activity,
+                                      const SizedBox(width: 8),
+                                      IconButton(
+                                        icon: const Icon(Icons.arrow_forward_ios),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => EventDetailPage(
+                                                eventId: activity['id'],
+                                                orgId: activity['orgID'],
+                                                eventData: activity,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EventDetailPage(
-                                        eventId: activity['id'],
-                                        orgId: activity['orgID'],
-                                        eventData: activity,
+                                          );
+                                        },
                                       ),
-                                    ),
-                                  );
-                                },
+
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EventDetailPage(
+                                          eventId: activity['id'],
+                                          orgId: activity['orgID'],
+                                          eventData: activity,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+
                       ],
                     );
                   },
