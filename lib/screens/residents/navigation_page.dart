@@ -5,6 +5,7 @@ import 'package:rmhconnect/screens/logo.dart';
 import 'package:rmhconnect/screens/residents/announcements_page.dart';
 import 'package:rmhconnect/screens/residents/profile_page.dart';
 import 'package:rmhconnect/screens/residents/residents_home.dart';
+import 'package:rmhconnect/screens/residents/Test.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
@@ -18,7 +19,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   static final List<Widget> _pages = <Widget>[
     ResidentsHome(),
-    AnnouncementsPage(),
+    Test(),
     ProfilePage()
   ];
 
