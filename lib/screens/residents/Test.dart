@@ -1,22 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:rmhconnect/login_screen.dart';
-import 'package:rmhconnect/SplashScreen.dart';
-import 'package:rmhconnect/screens/Home.dart';
-import 'package:rmhconnect/screens/admins/admin_announcements.dart';
-import 'package:rmhconnect/screens/admins/admin_branch_deatils_screen.dart';
-import 'package:rmhconnect/screens/admins/admin_events.dart';
-import 'package:rmhconnect/screens/admins/admin_home.dart';
-import 'package:rmhconnect/screens/admins/admin_navigation.dart';
-import 'package:rmhconnect/screens/admins/super_admin/super_admin_navigation.dart';
-import 'package:rmhconnect/screens/residents/announcements_page.dart';
-import 'package:rmhconnect/screens/residents/navigation_page.dart';
-import 'package:rmhconnect/screens/residents/profile_page.dart';
-import 'package:rmhconnect/signup_screen.dart';
-import 'package:rmhconnect/welcome.dart';
-import 'package:rmhconnect/screens/admins/adminbranches.dart';
-import 'package:rmhconnect/screens/admins/admin_members.dart';
-import 'package:rmhconnect/theme.dart';
 import 'package:rmhconnect/screens/residents/discovery.dart';
 import 'package:rmhconnect/constants.dart';
 
@@ -34,17 +17,33 @@ class _TestState extends State<Test> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
-        title: Text("Announcements", style: titling),
+        title: Text("Discovery", style: titling),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Discovery(),
-          Discovery(),
-          Discovery(),
-          Discovery(),
-          Discovery(),
-        ]
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('organizations').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          final docs = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: docs.length,
+            itemBuilder: ( context, int index) {
+              final data = docs[index].data() as Map<String, dynamic>;
+
+              final name = data['name'] ?? 'No name';
+              final url = data['url'] ?? 'No photo';
+
+              return Discovery(name: name, photo: url);
+            },
+          );
+        },
       )
     );
   }

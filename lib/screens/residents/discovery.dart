@@ -22,7 +22,9 @@ import 'package:rmhconnect/theme.dart';
 import 'package:rmhconnect/constants.dart';
 
 class Discovery extends StatelessWidget {
-  const Discovery({super.key});
+  final String name;
+  final String photo;
+  const Discovery({super.key, required this.name, required this.photo});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class Discovery extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://thumbs.dreamstime.com/b/funny-photo-small-fat-cat-its-ears-pinned-back-lying-flat-ground-just-attack-369969410.jpg"),
+                    image: NetworkImage(photo),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -54,7 +56,7 @@ class Discovery extends StatelessWidget {
               ListTile(
                 tileColor: Colors.white,
                 title: Center(
-                    child: Text("Learn more about Branch X", style: TextStyle(fontSize: 22))
+                    child: Text("`$name branch", style: TextStyle(fontSize: 20))
                 ),
               ),
             ],
