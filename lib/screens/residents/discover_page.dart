@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/residents/discovery.dart';
 import 'package:rmhconnect/constants.dart';
 
-class Test extends StatefulWidget {
-  const Test({super.key});
+class DiscoveryPage extends StatefulWidget {
+  const DiscoveryPage({super.key});
 
   @override
-  State<Test> createState() => _TestState();
+  State<DiscoveryPage> createState() => _DiscoveryPageState();
 }
 
-class _TestState extends State<Test> {
+class _DiscoveryPageState extends State<DiscoveryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
