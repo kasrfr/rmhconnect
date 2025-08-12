@@ -26,6 +26,8 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> orgNames = [];
   bool isLoading = true;
   bool showPastEvents = false;
+  List<Map<String, dynamic>> joinedOrganizations = [];
+  List<Map<String, dynamic>> upcomingActivities = [];
 
   @override
   void initState(){
@@ -218,7 +220,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Text(name, style: mytextnormal),
                                   Text(role, style: mytextnormal),
                                   Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-                                  Text(location, style: mytextnormal),
                                 ]
                             )
                           ]
@@ -230,95 +231,109 @@ class _ProfilePageState extends State<ProfilePage> {
                 : Center(child: CircularProgressIndicator()),
         
                 SizedBox(height: 30),
-        
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(25,0,0,0),
-                      child: Text("Current Charity: ", style: TextStyle(fontSize: 22)),
-                    ),
-                    SizedBox(width: 10),
-        
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: isLoading == false
-                          ? SizedBox(
-                              width: 150,
-                              child: DropdownSearch<String>(
-                                items: (f, cs) => orgNames,
-                                popupProps: const PopupProps.menu(
-                                  fit: FlexFit.loose,
-                                ),
-                                selectedItem: location,
-                                onChanged: (val) {
-                                  if (val != null) {
-                                    setState(() {
-                                      location = val;
-                                      locationPressed = false;
-                                    });
-                                    updateUserLocationInFirebase(location);
-                                  }
-                                },
-                              ),
-                            )
-                            : const SizedBox(),
-                      ),
-                    ),
-                  ]
-                ),
-        
-        
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,18.0,0,0),
-                  child: Text("My Events", style: titlingblck),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //const Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      ElevatedButton(
-                          onPressed: (){
-                            setState((){
-                              showPastEvents = false;
-                            });
-                          },
-                          child: Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
 
-                      ),
-                      ElevatedButton(
-                          onPressed: (){
-                            setState((){
-                              showPastEvents = true;
-
-                            });
-                          },
-                          child: Text('Past Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            // Force refresh
-                          });
-                        },
-                        icon: const Icon(Icons.refresh),
-                      ),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
+                DefaultTabController(
+                  length: 2,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if(showPastEvents == false)
-                        OrgGetInfo()
-                      else
-                        OrgGetInfoPast()
+                      TabBar(
+                        labelColor: CharityConnectTheme.primaryColor,
+                        unselectedLabelColor: CharityConnectTheme.secondaryTextColor,
+                        indicatorColor: CharityConnectTheme.primaryColor,
+                        tabs: const [
+                          Tab(text: 'Organizations'),
+                          Tab(text: 'Events')
+                        ],
+                      ),
+                      SizedBox(
+                        height: 400,
+                        child: TabBarView(
+                          children: [
+                            // Organizations Tab
+                            joinedOrganizations.isEmpty
+                                ? Center(child: Text('No organizations joined yet'))
+                                : ListView.builder(
+                              itemCount: joinedOrganizations.length,
+                              itemBuilder: (context, index) {
+                                final org = joinedOrganizations[index];
+                                return Card(
+                                  margin: EdgeInsets.symmetric(vertical: 8),
+                                  child: ListTile(
+                                    leading: Icon(Icons.business, color: CharityConnectTheme.primaryColor),
+                                    title: Text(org['name'].toUpperCase() ?? 'Organization'),
+                                    subtitle: Text(org['address'] ?? 'No address'),
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/organization_detail',
+                                        arguments: {
+                                          'orgId': org['orgId'],
+                                          'orgData': org,
+                                        },
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            // Upcoming Activities Tab
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      //const Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                      ElevatedButton(
+                                        onPressed: (){
+                                          setState((){
+                                            showPastEvents = false;
+                                          });
+                                        },
+                                        child: Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+                                      ),
+                                      ElevatedButton(
+                                          onPressed: (){
+                                            setState((){
+                                              showPastEvents = true;
+
+                                            });
+                                          },
+                                          child: Text('Past Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            // Force refresh
+                                          });
+                                        },
+                                        icon: const Icon(Icons.refresh),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      if(showPastEvents == false)
+                                        OrgGetInfo()
+                                      else
+                                        OrgGetInfoPast()
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
+
               ]
             )
           ),
