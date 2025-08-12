@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
-import 'package:rmhconnect/screens/Events.dart';
-import 'package:rmhconnect/screens/logo.dart';
-import 'package:rmhconnect/screens/residents/announcements_page.dart';
 import 'package:rmhconnect/screens/residents/profile_page.dart';
 import 'package:rmhconnect/screens/residents/residents_home.dart';
+import 'package:rmhconnect/screens/residents/discover_page.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
@@ -18,7 +16,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   static final List<Widget> _pages = <Widget>[
     ResidentsHome(),
-    AnnouncementsPage(),
+    DiscoveryPage(),
     ProfilePage()
   ];
 
@@ -41,7 +39,7 @@ class _NavigationPageState extends State<NavigationPage> {
         showSelectedLabels: true,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.mail), label: "Announcements"),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: "Discover"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
