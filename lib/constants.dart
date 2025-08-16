@@ -24,6 +24,7 @@ late String nmname = "bob";
 late String nmrole = "role";
 
 
+
 double resizedHeight(context, double mediumPhoneWidgetHeight){
   Size size = MediaQuery.of(context).size;
   double deviceHeight = size.height;

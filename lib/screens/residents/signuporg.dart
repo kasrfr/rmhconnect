@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -13,7 +15,46 @@ class Signuporg extends StatefulWidget {
   State<Signuporg> createState() => _SignuporgState();
 }
 
+
+
 class _SignuporgState extends State<Signuporg> {
+  late bool joined = false;
+  late String button = "Join";
+
+  @override
+  void initState(){
+    super.initState();
+    Checkorg();
+
+  }
+  Future <void> Checkorg() async{
+    final db = FirebaseFirestore.instance;
+    final userid = FirebaseAuth.instance.currentUser!.uid;
+    final user = db.collection('users').doc(userid).get();
+    user.then(
+        (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          final org = data['orgs'] ?? [] as List<String>;
+          print(org);
+          if(org.contains(widget.namee) == false){
+            setState(() {joined = false;});
+          }
+          else{
+            setState(() {joined = true;});
+          }
+          if(joined == false){
+            setState(() {button = "Join";});
+          }
+          else{
+            setState(() {button = "Leave";});
+          }
+        }
+    );
+
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,11 +86,31 @@ class _SignuporgState extends State<Signuporg> {
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Join",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
+                    onPressed: () {
+                      if(joined == false) {
+                        final db = FirebaseFirestore.instance;
+                        final docRef = db.collection('users').doc(
+                            FirebaseAuth.instance.currentUser!.uid);
+                        docRef.update({
+                          'orgs': FieldValue.arrayUnion([widget.namee])
+                        });
+                        setState(() {
+                          joined = true;
+                        });
+                      }
+                      else{
+                        final db = FirebaseFirestore.instance;
+                        final docRef = db.collection('users').doc(
+                            FirebaseAuth.instance.currentUser!.uid);
+                        docRef.update({
+                          'orgs': FieldValue.arrayRemove([widget.namee])
+                        });
+                        setState(() {
+                          joined = false;
+                        });
+                      };
+                    },
+                    child: Text(button, style: const TextStyle(fontSize: 20, color: Colors.white),),
                   ),
                 ],
               ),
