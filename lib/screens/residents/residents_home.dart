@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
 
+import '../../theme.dart';
+import 'announcements_page.dart';
 import 'event_detail_page.dart';
 
 class ResidentsHome extends StatefulWidget {
@@ -69,7 +71,26 @@ class _ResidentsHomeState extends State<ResidentsHome> {
           title: Text("CHARITY CONNECT", style: titling),
           centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: DefaultTabController(
+        length: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TabBar(
+              labelColor: CharityConnectTheme.primaryColor,
+              unselectedLabelColor: CharityConnectTheme.secondaryTextColor,
+              indicatorColor: CharityConnectTheme.primaryColor,
+              tabs: const [
+                Tab(text: 'Upcoming Events'),
+                Tab(text: 'Announcements')
+              ],
+            ),
+            SizedBox(
+              height: resizedHeight(context, 3880/7), //resizedHeight(context, 550),
+              child: TabBarView(
+                  children: [
+
+        SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -228,6 +249,15 @@ class _ResidentsHomeState extends State<ResidentsHome> {
           ],
         ),
       ),
+        AnnouncementsPage()
+    ]
+    )
+    ),
+
+    ]
+    )
+
+    )
     );
   }
 }

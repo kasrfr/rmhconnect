@@ -109,6 +109,12 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             TextButton(
               onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
                 password = controller.text;
                 Navigator.of(context).pop();
               },
@@ -276,41 +282,40 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                     SizedBox(
-                      height: 400,
+                      height: resizedHeight(context, 3880/7), //resizedHeight(context, 550),
                       child: TabBarView(
                         children: [
                           // Organizations Tab
                           joinedOrganizations.isEmpty
                               ? Center(child: Text('No organizations joined yet'))
-                              : Expanded(
-                                child: ListView.builder(
-                                                            itemCount: joinedOrganizations.length,
-                                                            itemBuilder: (context, index) {
-                                final org = joinedOrganizations[index];
-                                final discoveryName = org['name'];
-                                final discoveryPhoto = org['url'];
-                                // return Card(
-                                //   margin: EdgeInsets.symmetric(vertical: 8),
-                                //   child: ListTile(
-                                //     leading: Icon(Icons.business, color: CharityConnectTheme.primaryColor),
-                                //     title: Text(org['name'].toUpperCase() ?? 'Organization'),
-                                //     subtitle: Text(org['address'] ?? 'No address'),
-                                //     onTap: () {
-                                //       Navigator.pushNamed(
-                                //         context,
-                                //         '/organization_detail',
-                                //         arguments: {
-                                //           'orgId': org['orgId'],
-                                //           'orgData': org,
-                                //         },
-                                //       );
-                                //     },
-                                //   ),
-                                // ); ret
-                                return Discovery(name: discoveryName, photo: discoveryPhoto);
-                                                            },
-                                                          ),
-                              ),
+                              : ListView.builder(
+                                                          itemCount: joinedOrganizations.length,
+                                                          itemBuilder: (context, index) {
+                              final org = joinedOrganizations[index];
+                              final discoveryName = org['name'];
+                              final discoveryPhoto = org['url'];
+                              return Discovery(name: discoveryName, photo: discoveryPhoto);
+                              // return Card(
+                              //   margin: EdgeInsets.symmetric(vertical: 8),
+                              //   child: ListTile(
+                              //     leading: Icon(Icons.business, color: CharityConnectTheme.primaryColor),
+                              //     title: Text(org['name'].toUpperCase() ?? 'Organization'),
+                              //     subtitle: Text(org['address'] ?? 'No address'),
+                              //     onTap: () {
+                              //       Navigator.pushNamed(
+                              //         context,
+                              //         '/organization_detail',
+                              //         arguments: {
+                              //           'orgId': org['orgId'],
+                              //           'orgData': org,
+                              //         },
+                              //       );
+                              //     },
+                              //   ),
+                              // ); ret
+                              return Discovery(name: discoveryName, photo: discoveryPhoto);
+                                                          },
+                                                        ),
                           // Upcoming Activities Tab
                           Column(
                             children: [

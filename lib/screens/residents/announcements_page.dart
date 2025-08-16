@@ -58,74 +58,90 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: backgroundColor,
           title: Text("Announcements", style: titling),
           centerTitle: true,
-      ),
+      ),*/
 
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: fetchAnnouncements(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                final announcements = snapshot.data ?? [];
-
-                if (announcements.isEmpty) {
-                  return const Center(child: Text('No announcements available'));
-                }
-
-                return Card(
-                  child: ListView.builder(
-                    itemCount: announcements.length,
-                    itemBuilder: (context, index) {
-                      final item = announcements[index];
-                      final imgUrl = item['url'];
-                      final description = item['description'];
-                      final timestamp = item['timestamp'] as Timestamp?;
-                      final date = timestamp?.toDate();
-                  
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Card(
-                          color: CharityConnectTheme.cardColor,
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: ListTile(
-
-                              title: Text(description ?? 'No description'),
-                              subtitle: Text(
-                                date != null
-                                    ? DateFormat.yMMMd().add_jm().format(date)
-                                    : 'No timestamp',
-                              ),
-                              onTap: () {},
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+      body: SingleChildScrollView(
+        child: Column(
+            children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+        //(16.0),
+              child: Text(
+                'Announcements',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
             ),
-          ),
-        ],
-      ),
+            SizedBox(
+              height: 5000,//3880/7,
 
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: fetchAnnouncements(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  final announcements = snapshot.data ?? [];
+
+                  if (announcements.isEmpty) {
+                    return const Center(child: Text('No announcements available'));
+                  }
+
+                  return Card(
+                    child: ListView.builder(
+                      itemCount: announcements.length,
+                      itemBuilder: (context, index) {
+                        final item = announcements[index];
+                        final imgUrl = item['url'];
+                        final description = item['description'];
+                        final timestamp = item['timestamp'] as Timestamp?;
+                        final date = timestamp?.toDate();
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Card(
+                            color: CharityConnectTheme.cardColor,
+                            elevation: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12.0),
+                              child: ListTile(
+
+                                title: Text(description ?? 'No description'),
+                                subtitle: Text(
+                                  date != null
+                                      ? DateFormat.yMMMd().add_jm().format(date)
+                                      : 'No timestamp',
+                                ),
+                                onTap: () {},
+                              ),
+                            ),
+                            margin: const EdgeInsets.symmetric(vertical: 15),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
 
     );
   }
 }
+
