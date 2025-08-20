@@ -73,6 +73,7 @@ class _SignuporgState extends State<Signuporg> {
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(90),
             child: Container(
+              height: 80,
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
@@ -96,6 +97,7 @@ class _SignuporgState extends State<Signuporg> {
                         });
                         setState(() {
                           joined = true;
+                          button = "Leave";
                         });
                       }
                       else{
@@ -107,6 +109,7 @@ class _SignuporgState extends State<Signuporg> {
                         });
                         setState(() {
                           joined = false;
+                          button = "Join";
                         });
                       };
                     },
