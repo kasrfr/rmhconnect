@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/screens/residents/discovery.dart';
 import 'package:rmhconnect/constants.dart';
+import 'package:rmhconnect/screens/residents/signuporg.dart';
 
 class DiscoveryPage extends StatefulWidget {
   const DiscoveryPage({super.key});
@@ -39,8 +40,18 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
 
               final name = data['name'] ?? 'No name';
               final url = data['url'] ?? 'No photo';
+              final info = data['info'] ?? 'No info';
 
-              return Discovery(name: name, photo: url);
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Signuporg(photor: url, namee: name, linfo: info),
+                    )
+                  );
+                },
+                  child: Discovery(name: name, photo: url));
             },
           );
         },

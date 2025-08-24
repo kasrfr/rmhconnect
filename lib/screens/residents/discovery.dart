@@ -38,29 +38,25 @@ class Discovery extends StatelessWidget {
         ),
         color: CharityConnectTheme.cardColor,
         elevation: 100,
-        child: GestureDetector(
-          onTap: () {
-          },
-          child: Column(
-            children: [
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(photo),
-                    fit: BoxFit.cover,
-                  ),
+        child: Column(
+          children: [
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(photo),
+                  fit: BoxFit.cover,
                 ),
               ),
-              ListTile(
-                tileColor: Colors.white,
-                title: Center(
-                    child: Text("`$name branch", style: TextStyle(fontSize: 20))
-                ),
+            ),
+            ListTile(
+              tileColor: Colors.white,
+              title: Center(
+                  child: Text("`$name branch", style: TextStyle(fontSize: 20))
               ),
-            ],
-          )
+            ),
+          ],
         ),
       ),
     );
