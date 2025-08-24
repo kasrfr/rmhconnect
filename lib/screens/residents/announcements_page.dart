@@ -6,14 +6,47 @@ import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/theme.dart';
 
 
-class AnnouncementsPage extends StatefulWidget {
+
+class AnnouncementsPage extends StatelessWidget {
   const AnnouncementsPage({super.key});
 
-  @override
-  State<AnnouncementsPage> createState() => _AnnouncementsPageState();
-}
+  Future<void> fillJoinedOrgs() async{
+    List<Map<String, dynamic>> joinedOrganizations = [];
+    List<Map<String, dynamic>> upcomingActivities = [];
+    final user = FirebaseAuth.instance.currentUser;
 
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
+    final joinedOrgs = await FirebaseFirestore.instance // Fetch
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+    final tempJoinedOrgs = joinedOrgs['orgs']??[]; // ??[] makes empty list
+
+    for (int i = 0; i < tempJoinedOrgs.length; i++){
+      FirebaseFirestore.instance.collection("organizations")
+          .where('name', isEqualTo: tempJoinedOrgs[i])
+          .get()
+          .then(
+              (querySnapshot){
+            for (var docSnapshot in querySnapshot.docs) {
+              //      print('docSnapshot ID: ${docSnapshot.id}');
+              joinedOrganizations.add(docSnapshot
+                  .data()
+                  //.collection('announcements')
+              );
+            }
+            //print('Temp Joined Org: ${tempJoinedOrgs[i]}');
+          }
+      );
+    }
+    //print('tempJoinedOrgs: ${tempJoinedOrgs.length}');
+    //print('joinedOrganizations: ${joinedOrganizations.length}');
+
+    for(String in )
+    final orgEvents = await FirebaseFirestore.instance
+      .collection()
+  }
+
 
   Future<List<Map<String, dynamic>>> fetchAnnouncements() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -57,75 +90,77 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: backgroundColor,
-          title: Text("Announcements", style: titling),
-          centerTitle: true,
-      ),
-
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: fetchAnnouncements(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                final announcements = snapshot.data ?? [];
-
-                if (announcements.isEmpty) {
-                  return const Center(child: Text('No announcements available'));
-                }
-
-                return Card(
-                  child: ListView.builder(
-                    itemCount: announcements.length,
-                    itemBuilder: (context, index) {
-                      final item = announcements[index];
-                      final imgUrl = item['url'];
-                      final description = item['description'];
-                      final timestamp = item['timestamp'] as Timestamp?;
-                      final date = timestamp?.toDate();
-                  
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Card(
-                          color: CharityConnectTheme.cardColor,
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: ListTile(
-
-                              title: Text(description ?? 'No description'),
-                              subtitle: Text(
-                                date != null
-                                    ? DateFormat.yMMMd().add_jm().format(date)
-                                    : 'No timestamp',
-                              ),
-                              onTap: () {},
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+          //(16.0),
+          child: Text(
+            'Announcements',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
             ),
           ),
-        ],
-      ),
+        ),
+        FutureBuilder<List<Map<String, dynamic>>>(
+          future: fetchAnnouncements(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
 
+            final announcements = snapshot.data ?? [];
+
+            if (announcements.isEmpty) {
+              return const Center(child: Text('No announcements available'));
+            }
+
+            return Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: announcements.length,
+                itemBuilder: (context, index) {
+                  final item = announcements[index];
+                  final imgUrl = item['url'];
+                  final description = item['description'];
+                  final timestamp = item['timestamp'] as Timestamp?;
+                  final date = timestamp?.toDate();
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Card(
+                      color: CharityConnectTheme.cardColor,
+                      elevation: 5,
+                      margin: const EdgeInsets.symmetric(vertical: 15),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: ListTile(
+
+                          title: Text(description ?? 'No description'),
+                          subtitle: Text(
+                            date != null
+                                ? DateFormat.yMMMd().add_jm().format(date)
+                                : 'No timestamp',
+                          ),
+                          onTap: () {},
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ],
     );
+
+
   }
 }

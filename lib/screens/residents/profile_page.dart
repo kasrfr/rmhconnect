@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
 import 'package:rmhconnect/screens/residents/org_get_info_past.dart';
 import 'package:rmhconnect/screens/residents/org_get_info.dart';
 import 'package:rmhconnect/theme.dart';
+
+import 'discovery.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -34,6 +37,33 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     user = FirebaseAuth.instance.currentUser;
     init();
+    //look thru user profile, get field, fills joinedOrgs
+    fillJoinedOrgs();
+  }
+
+  Future<void> fillJoinedOrgs() async{
+    final user = FirebaseAuth.instance.currentUser;
+
+    final joinedOrgs = await FirebaseFirestore.instance // Fetch
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+        final tempJoinedOrgs = joinedOrgs['orgs']??[]; // ??[] makes empty list
+
+        for (int i = 0; i < tempJoinedOrgs.length; i++){
+          FirebaseFirestore.instance.collection("organizations").where('name', isEqualTo: tempJoinedOrgs[i]).get().then(
+              (querySnapshot){
+                for (var docSnapshot in querySnapshot.docs) {
+            //      print('docSnapshot ID: ${docSnapshot.id}');
+                  joinedOrganizations.add(docSnapshot.data());
+                }
+                //print('Temp Joined Org: ${tempJoinedOrgs[i]}');
+              }
+          );
+        }
+        //print('tempJoinedOrgs: ${tempJoinedOrgs.length}');
+        //print('joinedOrganizations: ${joinedOrganizations.length}');
   }
 
   Future<void> init() async{
@@ -77,6 +107,12 @@ class _ProfilePageState extends State<ProfilePage> {
             decoration: InputDecoration(hintText: 'Password'),
           ),
           actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
             TextButton(
               onPressed: () {
                 password = controller.text;
@@ -199,145 +235,147 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ]
       ),
-      body: SingleChildScrollView(
-        child: Center(
-            child: Column(
-              children: [
-                informationLoaded ?
-                  Container(
-                  //children: [
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Profilephoto(
-                              pfp: "assets/images/person-icon.png",
-                            ),
-                            Column(
-                                children: [
-                                  Text(name, style: mytextnormal),
-                                  Text(role, style: mytextnormal),
-                                  Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
-                                ]
-                            )
-                          ]
-                      ),
-                    ],
-                  ),
-                  //]
-                )
-                : Center(child: CircularProgressIndicator()),
-        
-                SizedBox(height: 30),
-
-                DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TabBar(
-                        labelColor: CharityConnectTheme.primaryColor,
-                        unselectedLabelColor: CharityConnectTheme.secondaryTextColor,
-                        indicatorColor: CharityConnectTheme.primaryColor,
-                        tabs: const [
-                          Tab(text: 'Organizations'),
-                          Tab(text: 'Events')
-                        ],
-                      ),
-                      SizedBox(
-                        height: 400,
-                        child: TabBarView(
-                          children: [
-                            // Organizations Tab
-                            joinedOrganizations.isEmpty
-                                ? Center(child: Text('No organizations joined yet'))
-                                : ListView.builder(
-                              itemCount: joinedOrganizations.length,
-                              itemBuilder: (context, index) {
-                                final org = joinedOrganizations[index];
-                                return Card(
-                                  margin: EdgeInsets.symmetric(vertical: 8),
-                                  child: ListTile(
-                                    leading: Icon(Icons.business, color: CharityConnectTheme.primaryColor),
-                                    title: Text(org['name'].toUpperCase() ?? 'Organization'),
-                                    subtitle: Text(org['address'] ?? 'No address'),
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/organization_detail',
-                                        arguments: {
-                                          'orgId': org['orgId'],
-                                          'orgData': org,
-                                        },
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                            // Upcoming Activities Tab
-                            Column(
+      body: Center(
+          child: Column(
+            children: [
+              informationLoaded ?
+                Container(
+                //children: [
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Profilephoto(
+                            pfp: "assets/images/person-icon.png",
+                          ),
+                          Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      //const Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                      ElevatedButton(
+                                Text(name, style: mytextnormal),
+                                Text(role, style: mytextnormal),
+                                Text(email, style: TextStyle(fontSize: 18, decoration: TextDecoration.underline)),
+                              ]
+                          )
+                        ]
+                    ),
+                  ],
+                ),
+                //]
+              )
+              : Center(child: CircularProgressIndicator()),
+
+              SizedBox(height: 30),
+
+              DefaultTabController(
+                length: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TabBar(
+                      labelColor: CharityConnectTheme.primaryColor,
+                      unselectedLabelColor: CharityConnectTheme.secondaryTextColor,
+                      indicatorColor: CharityConnectTheme.primaryColor,
+                      tabs: const [
+                        Tab(text: 'Organizations'),
+                        Tab(text: 'Events')
+                      ],
+                    ),
+                    SizedBox(
+                      height: resizedHeight(context, 3880/7), //resizedHeight(context, 550),
+                      child: TabBarView(
+                        children: [
+                          // Organizations Tab
+                          joinedOrganizations.isEmpty
+                              ? Center(child: Text('No organizations joined yet'))
+                              : ListView.builder(
+                                                          itemCount: joinedOrganizations.length,
+                                                          itemBuilder: (context, index) {
+                              final org = joinedOrganizations[index];
+                              final discoveryName = org['name'];
+                              final discoveryPhoto = org['url'];
+                              return Discovery(name: discoveryName, photo: discoveryPhoto);
+                              // return Card(
+                              //   margin: EdgeInsets.symmetric(vertical: 8),
+                              //   child: ListTile(
+                              //     leading: Icon(Icons.business, color: CharityConnectTheme.primaryColor),
+                              //     title: Text(org['name'].toUpperCase() ?? 'Organization'),
+                              //     subtitle: Text(org['address'] ?? 'No address'),
+                              //     onTap: () {
+                              //       Navigator.pushNamed(
+                              //         context,
+                              //         '/organization_detail',
+                              //         arguments: {
+                              //           'orgId': org['orgId'],
+                              //           'orgData': org,
+                              //         },
+                              //       );
+                              //     },
+                              //   ),
+                              // ); ret
+                              return Discovery(name: discoveryName, photo: discoveryPhoto);
+                                                          },
+                                                        ),
+                          // Upcoming Activities Tab
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    //const Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                    ElevatedButton(
+                                      onPressed: (){
+                                        setState((){
+                                          showPastEvents = false;
+                                        });
+                                      },
+                                      child: Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+                                    ),
+                                    ElevatedButton(
                                         onPressed: (){
                                           setState((){
-                                            showPastEvents = false;
+                                            showPastEvents = true;
+
                                           });
                                         },
-                                        child: Text('My Joined Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: (){
-                                            setState((){
-                                              showPastEvents = true;
-
-                                            });
-                                          },
-                                          child: Text('Past Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            // Force refresh
-                                          });
-                                        },
-                                        icon: const Icon(Icons.refresh),
-                                      ),
-                                    ],
-                                  ),
+                                        child: Text('Past Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          // Force refresh
+                                        });
+                                      },
+                                      icon: const Icon(Icons.refresh),
+                                    ),
+                                  ],
                                 ),
-                                SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      if(showPastEvents == false)
-                                        OrgGetInfo()
-                                      else
-                                        OrgGetInfoPast()
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    if(showPastEvents == false)
+                                      OrgGetInfo()
+                                    else
+                                      OrgGetInfoPast()
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
 
-              ]
-            )
-          ),
-      )
+            ]
+          )
+        )
     );
   }
 }
