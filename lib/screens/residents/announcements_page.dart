@@ -42,9 +42,9 @@ class AnnouncementsPage extends StatelessWidget {
     //print('tempJoinedOrgs: ${tempJoinedOrgs.length}');
     //print('joinedOrganizations: ${joinedOrganizations.length}');
 
-    for(String in )
-    final orgEvents = await FirebaseFirestore.instance
-      .collection()
+    // for(String in )
+    // final orgEvents = await FirebaseFirestore.instance
+    //   .collection()
   }
 
 

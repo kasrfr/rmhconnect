@@ -49,11 +49,15 @@ class _ResidentsHomeState extends State<ResidentsHome> {
     print("Organization found: ${orgQuery.docs.first.data()}");
     final orgDocId = orgQuery.docs.first.id;
 
+// Get current time
+    final now = DateTime.now();
+
     final announcementsSnapshot =
     await FirebaseFirestore.instance
         .collection('organizations')
         .doc(orgDocId)
         .collection('activities')
+        .where('dateTime', isGreaterThanOrEqualTo: Timestamp.fromDate(now)) // 👈 filter here
         .orderBy('dateTime', descending: true)
         .get();
 
@@ -89,7 +93,7 @@ class _ResidentsHomeState extends State<ResidentsHome> {
                     ],
                   ),
                   SizedBox(
-                    height: resizedHeight(context, 700), //3880/7), //resizedHeight(context, 550),
+                    height: resizedHeight(context, 650), //3880/7),
                     child: TabBarView(
                       children: [
                         Column(

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
 import 'package:rmhconnect/screens/residents/org_get_info_past.dart';
@@ -31,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool showPastEvents = false;
   List<Map<String, dynamic>> joinedOrganizations = [];
   List<Map<String, dynamic>> upcomingActivities = [];
+  File? _imageFile;
 
   @override
   void initState(){
@@ -196,18 +201,82 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> updateUserLocationInFirebase(String newLocation) async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .update({'location': newLocation});
+
+    Future<void> _saveProfile() async {
+      if (user == null) return;
+
+      try {
+        String? profileImageUrl;
+
+        // Upload new image if selected
+        if (_imageFile != null) {
+          profileImageUrl = await _uploadProfileImage();
+          if (profileImageUrl == null) {
+            throw Exception('Failed to upload image');
+          }
+        }
+
+        // Update user profile in Firestore
+        final updateData = {
+          'profileImageUrl': profileImageUrl ?? '',
+        };
+
+        // Only update image URL if we have a new one
+        if (profileImageUrl != null) {
+          updateData['profileImageUrl'] = profileImageUrl;
+        }
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user!.uid)
+            .update(updateData);
+
+        setState(() {
+          _imageFile = null; // Clear the selected file
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully!')),
+        );
+      } catch (e) {
+        setState(() {
+          print(e.toString());
+        });
+      }
+    }
+
+
+    Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (picked != null) {
+      setState(() {
+        _imageFile = File(picked.path);
+      });
+      _saveProfile();
     }
   }
 
+  Future<String?> _uploadProfileImage() async {
+    if (_imageFile == null || user == null) return null;
 
-  @override
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child(
+        'profile_images/${user!.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg',
+      );
+
+      await storageRef.putFile(_imageFile!);
+      return await storageRef.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -247,8 +316,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Profilephoto(
-                            pfp: "assets/images/person-icon.png",
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Profilephoto(
+                              pfp: "assets/images/person-icon.png",
+                            ),
                           ),
                           Column(
                               children: [
@@ -282,19 +354,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                     SizedBox(
-                      height: resizedHeight(context, 3880/7), //resizedHeight(context, 550),
+                      height: resizedHeight(context, 3880/8), //resizedHeight(context, 550),
                       child: TabBarView(
                         children: [
                           // Organizations Tab
                           joinedOrganizations.isEmpty
                               ? Center(child: Text('No organizations joined yet'))
                               : ListView.builder(
-                                                          itemCount: joinedOrganizations.length,
-                                                          itemBuilder: (context, index) {
-                              final org = joinedOrganizations[index];
-                              final discoveryName = org['name'];
-                              final discoveryPhoto = org['url'];
-                              return Discovery(name: discoveryName, photo: discoveryPhoto);
+                                  itemCount: joinedOrganizations.length,
+                                  itemBuilder: (context, index) {
+                                    final org = joinedOrganizations[index];
+                                    final discoveryName = org['name'];
+                                    final discoveryPhoto = org['url'];
+                                    return Discovery(name: discoveryName, photo: discoveryPhoto);
                               // return Card(
                               //   margin: EdgeInsets.symmetric(vertical: 8),
                               //   child: ListTile(
@@ -314,8 +386,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               //   ),
                               // ); ret
                               return Discovery(name: discoveryName, photo: discoveryPhoto);
-                                                          },
-                                                        ),
+                                  },
+                              ),
                           // Upcoming Activities Tab
                           Column(
                             children: [
