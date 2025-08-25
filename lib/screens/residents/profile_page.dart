@@ -44,6 +44,9 @@ class _ProfilePageState extends State<ProfilePage> {
     init();
     //look thru user profile, get field, fills joinedOrgs
     fillJoinedOrgs();
+
+
+
   }
 
   Future<void> fillJoinedOrgs() async{

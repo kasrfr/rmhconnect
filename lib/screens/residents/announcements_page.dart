@@ -10,7 +10,7 @@ import 'package:rmhconnect/theme.dart';
 class AnnouncementsPage extends StatelessWidget {
   const AnnouncementsPage({super.key});
 
-  Future<void> fillJoinedOrgs() async{
+  Future<List<Map<String, dynamic>>> fillJoinedOrgs() async{
     List<Map<String, dynamic>> joinedOrganizations = [];
     List<Map<String, dynamic>> upcomingActivities = [];
     final user = FirebaseAuth.instance.currentUser;
@@ -22,31 +22,25 @@ class AnnouncementsPage extends StatelessWidget {
 
     final tempJoinedOrgs = joinedOrgs['orgs']??[]; // ??[] makes empty list
 
-    for (int i = 0; i < tempJoinedOrgs.length; i++){
-      FirebaseFirestore.instance.collection("organizations")
-          .where('name', isEqualTo: tempJoinedOrgs[i])
-          .get()
-          .then(
-              (querySnapshot){
-            for (var docSnapshot in querySnapshot.docs) {
-              //      print('docSnapshot ID: ${docSnapshot.id}');
-              joinedOrganizations.add(docSnapshot
-                  .data()
-                  //.collection('announcements')
-              );
-            }
-            //print('Temp Joined Org: ${tempJoinedOrgs[i]}');
-          }
-      );
-    }
-    //print('tempJoinedOrgs: ${tempJoinedOrgs.length}');
-    //print('joinedOrganizations: ${joinedOrganizations.length}');
+    final now = DateTime.now();
 
-    // for(String in )
-    // final orgEvents = await FirebaseFirestore.instance
-    //   .collection()
+    final querySnapshot = await FirebaseFirestore.instance.collectionGroup("announcements")
+        .where('dateTime', isGreaterThanOrEqualTo: Timestamp.fromDate(now))
+        .orderBy(DateTime)
+          .get();
+
+    final allAnnouncements = querySnapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        'orgId': doc.reference.parent.parent?.id, // 👈 parent org id
+        ...doc.data() as Map<String, dynamic>,
+      };
+    })
+    .toList();
+
+    return allAnnouncements;
+
   }
-
 
   Future<List<Map<String, dynamic>>> fetchAnnouncements() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -54,6 +48,12 @@ class AnnouncementsPage extends StatelessWidget {
     if (user == null) {
       throw Exception("User not logged in");
     }
+
+    final allAnnouncements2 = await fillJoinedOrgs();
+    for(int i=0; i < allAnnouncements2.length; i++){
+      //print(allAnnouncements2[i]);
+    }
+
 
     final userDoc = await FirebaseFirestore.instance
         .collection('users')
