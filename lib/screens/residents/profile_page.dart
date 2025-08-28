@@ -36,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Map<String, dynamic>> joinedOrganizations = [];
   List<Map<String, dynamic>> upcomingActivities = [];
   File? _imageFile;
+  String? profileImageUrl;
 
   @override
   void initState(){
@@ -84,6 +85,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         try{
+          profileImageUrl = userDoc['profileImageUrl'];
+        }catch(e){
+          profileImageUrl = null;
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({
+                'profileImageUrl': profileImageUrl
+              });
+        }
+      });
+
+      setState(() {
+        try{
           name = userDoc['name'];
           role = userDoc['role'];
           email = userDoc['email'];
@@ -97,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         informationLoaded = true;
       });
-      }
+    }
 
   }
 
@@ -321,9 +336,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           GestureDetector(
                             onTap: _pickImage,
-                            child: Profilephoto(
-                              pfp: "assets/images/person-icon.png",
-                            ),
+                              child:
+                              profileImageUrl != null
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(profileImageUrl!)
+                                    )
+                                  : Profilephoto(pfp: "assets/images/person-icon.png")
                           ),
                           Column(
                               children: [
