@@ -84,13 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
           name = userDoc['name'];
           role = userDoc['role'];
           email = userDoc['email'];
-          location = userDoc['location'];
+          //location = userDoc['location'];
           loadOrgNames();
         }catch(e){
           name = '';
           role = '';
           email = '';
-          location = '';
+          //location = '';
         }
         informationLoaded = true;
       });

@@ -30,9 +30,13 @@ class _ResidentsHomeState extends State<ResidentsHome> {
         .doc(user.uid)
         .get();
 
-    final location = userDoc.data()?['location'];
-    if (location == null) {
-      throw Exception("User does not have a location set");
+
+    try{
+      final location = userDoc.data()?['orgs'][0];
+    }
+    catch(e){
+      Text("User does not have a location set");
+      //throw Exception("User does not have a location set");
     }
 
     final orgQuery =
@@ -116,7 +120,7 @@ class _ResidentsHomeState extends State<ResidentsHome> {
                                   return const Center(child: CircularProgressIndicator());
                                 }
 
-                                if (snapshot.hasError) {
+                                if (snapshot.hasError ) {
                                   return Center(child: Text('Error: ${snapshot.error}'));
                                 }
 

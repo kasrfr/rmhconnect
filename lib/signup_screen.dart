@@ -31,10 +31,10 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState(){
     super.initState();
-    loadOrgNames();
+    //loadOrgNames();
   }
 
-  Future<void> loadOrgNames() async {
+  /*Future<void> loadOrgNames() async {
     final snapshot =
     await FirebaseFirestore.instance.collection('organizations').get();
     final names = snapshot.docs
@@ -46,7 +46,7 @@ class _SignupPageState extends State<SignupPage> {
       orgNames = names;
       isLoading = false;
     });
-  }
+  }*/
 
 
   @override
@@ -59,185 +59,186 @@ class _SignupPageState extends State<SignupPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),
-          child: isLoading ?
-            Center(child: const CircularProgressIndicator()) :
-            Form(
-              key: _formKey,
-              child: Column(
+          child:
+            Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
 
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0,horizontal: 30),
-                  child: Text(
-                      "Welcome!",
-                      style: TextStyle(
-                        fontSize: 32
-                      ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30,horizontal: 0),
-                  child: Text(
-                      "We are excited to have you!",
-                      style: TextStyle(
-                          fontSize: 24
-                      )
-                  ),
-                ),
-                TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                        labelText: 'Name'
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0,horizontal: 30),
+                    child: Text(
+                        "Welcome!",
+                        style: TextStyle(
+                          fontSize: 32
+                        ),
                     ),
-                    validator: (String? name) {
-                      if (name == null || name.isEmpty) {
-                        return 'Please enter a screen name';
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30,horizontal: 0),
+                    child: Text(
+                        "We are excited to have you!",
+                        style: TextStyle(
+                            fontSize: 24
+                        )
+                    ),
+                  ),
+                  TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                          labelText: 'Name'
+                      ),
+                      validator: (String? name) {
+                        if (name == null || name.isEmpty) {
+                          return 'Please enter a screen name';
+                        }
+                        return null;
+                      },
+                      onChanged: (val) => setState(() => name = val)
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email'
+                    ),
+                    validator: (String? email) {
+                      if (email == null || email.isEmpty) {
+                        return 'Please enter your email';
                       }
                       return null;
                     },
-                    onChanged: (val) => setState(() => name = val)
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email'
+                    onChanged: (val) => setState(() => email = val)
                   ),
-                  validator: (String? email) {
-                    if (email == null || email.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                  onChanged: (val) => setState(() => email = val)
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password'
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Password'
+                    ),
+                    obscureText: true,
+                    validator: (String? password) {
+                      if (password == null || password.length < 8) {
+                        return 'Please enter a password with at least 8 characters.';
+                      }
+                      return null;
+                    },
                   ),
-                  obscureText: true,
-                  validator: (String? password) {
-                    if (password == null || password.length < 8) {
-                      return 'Please enter a password with at least 8 characters.';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm password'
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm password'
+                    ),
+                    obscureText: true,
+                    validator: (String? password) {
+                      if (password != _passwordController.text) {
+                        return 'Passwords do not match.';
+                      }
+                      return null;
+                    },
+                    onChanged: (val) => setState(() => password = val)
                   ),
-                  obscureText: true,
-                  validator: (String? password) {
-                    if (password != _passwordController.text) {
-                      return 'Passwords do not match.';
-                    }
-                    return null;
-                  },
-                  onChanged: (val) => setState(() => password = val)
-                ),
-                SizedBox(
-                  height: 35
-                ),
-                DropdownSearch<String>(
-                  decoratorProps: DropDownDecoratorProps(
-                    decoration: InputDecoration(
-                      labelText: 'Choose a Charity'
+                  SizedBox(
+                    height: 35
+                  ),
+                  // DropdownSearch<String>(
+                  //   decoratorProps: DropDownDecoratorProps(
+                  //     decoration: InputDecoration(
+                  //       labelText: 'Choose a Charity'
+                  //     )
+                  //   ),
+                  //   items: (f, cs) => orgNames,
+                  //     popupProps: PopupProps.menu(
+                  //     fit: FlexFit.loose
+                  //     ),
+                  //     selectedItem: valueOrg,
+                  //     validator: (String? valueOrg) {
+                  //       if (valueOrg == null || valueOrg.isEmpty) {
+                  //       return 'Please select your location';
+                  //       }
+                  //       return null;
+                  //       },
+                  //         onChanged: (val) => setState(() => valueOrg = val)
+                  //   ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child: Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              error = '';
+                            });
+                            try{
+                              final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              );
+                              final roleDoc = await FirebaseFirestore.instance
+                                .collection('admins')
+                                .where('email', isEqualTo: email)
+                                .limit(1)
+                                .get();
+                              role = (roleDoc.docs.isNotEmpty) ? 'admin': 'user';
+                              await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(credential.user!.uid)
+                                .set({
+                                  'email': email,
+                                  'role': role,
+                                  'location': valueOrg,
+                                  'name': name,
+                                });
+                              if (role == 'admin') {
+                                Navigator.pushReplacementNamed(context, '/admin_navigation');
+                              }
+                              else {
+                                Navigator.pushReplacementNamed(context, '/navigation_screen');
+                              }
+                            }
+                            catch(e) {
+                              setState(() { error = e.toString(); });
+                            }
+                          }
+                        },
+                      style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue
+                      ),
+                        child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                                color: Colors.white
+                            )
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+                    child: TextButton(
+                      onPressed: (){
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: const Text(
+                        "Not your first time? Log in!",
+                            style: TextStyle(
+                              color: Colors.blue
+                            )
+                        )
                     )
                   ),
-                  items: (f, cs) => orgNames,
-                    popupProps: PopupProps.menu(
-                    fit: FlexFit.loose
-                    ),
-                    selectedItem: valueOrg,
-                    validator: (String? valueOrg) {
-                      if (valueOrg == null || valueOrg.isEmpty) {
-                      return 'Please select your location';
-                      }
-                      return null;
-                      },
-                        onChanged: (val) => setState(() => valueOrg = val)
-                  ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                  child: Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            error = '';
-                          });
-                          try{
-                            final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-                            final roleDoc = await FirebaseFirestore.instance
-                              .collection('admins')
-                              .where('email', isEqualTo: email)
-                              .limit(1)
-                              .get();
-                            role = (roleDoc.docs.isNotEmpty) ? 'admin': 'user';
-                            await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(credential.user!.uid)
-                              .set({
-                                'email': email,
-                                'role': role,
-                                'location': valueOrg,
-                                'name': name,
-                              });
-                            if (role == 'admin') {
-                              Navigator.pushReplacementNamed(context, '/admin_navigation');
-                            }
-                            else {
-                              Navigator.pushReplacementNamed(context, '/navigation_screen');
-                            }
-                          }
-                          catch(e) {
-                            setState(() { error = e.toString(); });
-                          }
-                        }
-                      },
-                    style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue
-                    ),
-                      child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                              color: Colors.white
-                          )
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-                  child: TextButton(
-                    onPressed: (){
-                      Navigator.pushReplacementNamed(context, '/login');
-                    },
-                    child: const Text(
-                      "Not your first time? Log in!",
-                          style: TextStyle(
-                            color: Colors.blue
-                          )
-                      )
-                  )
-                ),
-                if (error.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Text(error, style: TextStyle(color: Colors.red)),
+                  if (error.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(error, style: TextStyle(color: Colors.red)),
+                  ],
                 ],
-              ],
-            ),
-          )
+              ),
+                        ),
+            )
         ),
       )
     );
