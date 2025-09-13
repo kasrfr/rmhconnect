@@ -65,8 +65,18 @@ class _AdminEventsState extends State<AdminEvents> {
       });
       await eventRef.update({'id': eventRef.id});
       print("Activity added successfully.");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Activity added successfully.")
+          )
+      );
     } catch (e) {
       print("Failed to add activity: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Failed to add activity.")
+          )
+      );
     }
   }
 
@@ -191,7 +201,7 @@ class _AdminEventsState extends State<AdminEvents> {
                           TextFormField(
                             controller: descripcontrol,
                             decoration: InputDecoration(
-                              labelText: "New Event Location",
+                              labelText: "New Event Description",
                             ),
                             validator: (String? eventdescripvalue) {
                               if (eventdescripvalue == null ||
@@ -229,6 +239,11 @@ class _AdminEventsState extends State<AdminEvents> {
                                   }
                                   else{
                                     print("error");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text("Error")
+                                        )
+                                    );
                                   }
                                 },
                                 child: Text("Create"),
