@@ -43,6 +43,7 @@ dependencies:
   dropdown_search: ^6.0.2
   image_picker: ^1.1.2
   firebase_storage: ^12.4.10
+  firebase_app_check: ^0.3.2+10
 
 dev_dependencies:
   flutter_test:

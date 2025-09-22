@@ -114,34 +114,67 @@ class _SuperAdminBranchDetailsState extends State<SuperAdminBranchDetails> {
                       ]
                   ),
                   SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/admin_members',
-                        arguments: {
-                          'orgName': widget.name,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/admin_members',
+                            arguments: {
+                              'orgName': widget.name,
+                            },
+                          );
                         },
-                      );
-                    },
-                    child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
+                        child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            color: CharityConnectTheme.cardColor,
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Column(
+                                  children: [
+                                    Icon(Icons.group, color: CharityConnectTheme.primaryColor, size: 40),
+                                    SizedBox(height: 20),
+                                    Text("Members", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  ]
+                              ),
+                            )
                         ),
-                        color: CharityConnectTheme.cardColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: Column(
-                              children: [
-                                Icon(Icons.group, color: CharityConnectTheme.primaryColor, size: 40),
-                                SizedBox(height: 20),
-                                Text("Members", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                              ]
-                          ),
-                        )
-                    ),
-                  )
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/admin_members',
+                            arguments: {
+                              'orgName': widget.name,
+                            },
+                          );
+                        },
+                        child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            color: CharityConnectTheme.cardColor,
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Column(
+                                  children: [
+                                    Icon(Icons.group, color: CharityConnectTheme.primaryColor, size: 40),
+                                    SizedBox(height: 20),
+                                    Text("Members", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  ]
+                              ),
+                            )
+                        ),
+                      ),
+                    ],
+                  ),
                 ]
             )
         )

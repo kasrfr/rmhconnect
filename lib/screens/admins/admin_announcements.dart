@@ -59,6 +59,11 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
   Future<void> _createAnnouncement(String orgName, String description, String url) async {
     if (description.trim().isEmpty || url.trim().isEmpty) {
       print("Description and URL cannot be empty.");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Description and URL cannot be empty.")
+          )
+      );
       return; // Stop the function if either is empty
     }
 
@@ -71,6 +76,11 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
 
       if (orgQuery.docs.isEmpty) {
         throw Exception("Organization '$orgName' not found.");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("Organization '$orgName' not found.")
+            )
+        );
       }
 
       final orgDocId = orgQuery.docs.first.id;
@@ -96,8 +106,18 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
 
       await announcementRef.update({'id': announcementRef.id});
       print("Announcement added successfully.");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Announcement added successfully.")
+        )
+      );
     } catch (e) {
       print("Failed to add announcement: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: const Text("Failed to add announcement.")
+          )
+      );
     }
   }
 
@@ -111,6 +131,11 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
 
       if (orgQuery.docs.isEmpty) {
         print("No organization found with name: $orgName");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("No organization found with name: $orgName")
+            )
+        );
         return;
       }
 
@@ -127,11 +152,26 @@ class _AdminAnnouncementsState extends State<AdminAnnouncements> {
       if (docSnapshot.exists) {
         await announcementRef.delete();
         print("Announcement with UID '$uid' deleted successfully from organization '$orgName'.");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("Announcement with UID '$uid' deleted successfully from organization '$orgName'.")
+            )
+        );
       } else {
         print("No announcement found with UID: $uid under organization: $orgName");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("No announcement found with UID: $uid under organization: $orgName")
+            )
+        );
       }
     } catch (e) {
       print("Error deleting announcement: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("No announcement found with UID: $uid under organization: $orgName")
+          )
+      );
     }
   }
 

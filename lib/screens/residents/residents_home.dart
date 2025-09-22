@@ -16,6 +16,8 @@ class ResidentsHome extends StatefulWidget {
   State<ResidentsHome> createState() => _ResidentsHomeState();
 }
 
+
+
 class _ResidentsHomeState extends State<ResidentsHome> {
   Future<List<Map<String, dynamic>>> fetchAnnouncements() async {
     final user = FirebaseAuth.instance.currentUser;

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/screens/ProfilePhoto.dart';
@@ -26,6 +30,8 @@ class _AdminProfileState extends State<AdminProfile> {
   String role = '';
   String email = '';
   String location = '';
+  File? _imageFile;
+  String? profileImageUrl;
 
   @override
   void initState(){
@@ -41,6 +47,20 @@ class _AdminProfileState extends State<AdminProfile> {
           .collection('users')
           .doc(user.uid)
           .get();
+
+      setState(() {
+        try{
+          profileImageUrl = userDoc['profileImageUrl'];
+        }catch(e){
+          profileImageUrl = null;
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({
+            'profileImageUrl': profileImageUrl
+          });
+        }
+      });
 
       setState(() {
         try{
@@ -124,6 +144,81 @@ class _AdminProfileState extends State<AdminProfile> {
     }
   }
 
+  Future<void> _saveProfile() async {
+    if (user == null) return;
+
+    try {
+      String? profileImageUrl;
+
+      // Upload new image if selected
+      if (_imageFile != null) {
+        profileImageUrl = await _uploadProfileImage();
+        if (profileImageUrl == null) {
+          throw Exception('Failed to upload image');
+        }
+      }
+
+      // Update user profile in Firestore
+      final updateData = {
+        'profileImageUrl': profileImageUrl ?? '',
+      };
+
+      // Only update image URL if we have a new one
+      if (profileImageUrl != null) {
+        updateData['profileImageUrl'] = profileImageUrl;
+      }
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .update(updateData);
+
+      setState(() {
+        _imageFile = null; // Clear the selected file
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully!')),
+      );
+    } catch (e) {
+      setState(() {
+        print(e.toString());
+      });
+    }
+  }
+
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (picked != null) {
+      setState(() {
+        _imageFile = File(picked.path);
+      });
+      _saveProfile();
+    }
+  }
+
+  Future<String?> _uploadProfileImage() async {
+    if (_imageFile == null || user == null) return null;
+
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child(
+        'profile_images/${user!.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg',
+      );
+
+      await storageRef.putFile(_imageFile!);
+      return await storageRef.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,8 +257,15 @@ class _AdminProfileState extends State<AdminProfile> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Profilephoto(
-                          pfp: "assets/images/person-icon.png",
+                        GestureDetector(
+                            onTap: _pickImage,
+                            child:
+                            profileImageUrl != null
+                                ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(profileImageUrl!)
+                            )
+                                : Profilephoto(pfp: "assets/images/person-icon.png")
                         ),
                         Column(
                             children: [
