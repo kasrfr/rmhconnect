@@ -23,10 +23,81 @@ class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser!;
+  final phoneController = TextEditingController();
   bool isLoading = true;
   String? valueOrg;
   String name = '';
   String error = '';
+
+  Future<String> getSmsCodeFromUser() async {
+    String sms = '';
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+        return AlertDialog(
+          title: Text('Enter sms code'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(hintText: 'sms'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                sms = controller.text;
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+    return sms;
+  }
+
+  void twofactor () async {
+    final session = await user.multiFactor.getSession();
+    final auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      multiFactorSession: session,
+      phoneNumber: phoneController.text,
+      verificationCompleted: (_) {},
+      verificationFailed: (_) {},
+      codeSent: (String verificationId, int? resendToken) async {
+        // See `firebase_auth` example app for a method of retrieving user's sms code:
+        // https://github.com/firebase/flutterfire/blob/main/packages/firebase_auth/firebase_auth/example/lib/auth.dart#L591
+        final smsCode = await getSmsCodeFromUser();
+
+        if (smsCode != "") {
+          // Create a PhoneAuthCredential with the code
+          final credential = PhoneAuthProvider.credential(
+            verificationId: verificationId,
+            smsCode: smsCode,
+          );
+
+          try {
+            await user.multiFactor.enroll(
+              PhoneMultiFactorGenerator.getAssertion(
+                credential,
+              ),
+            );
+          } on FirebaseAuthException catch (e) {
+            print(e.message);
+          }
+        }
+      },
+      codeAutoRetrievalTimeout: (_) {},
+    );
+  }
+
 
   @override
   void initState(){
