@@ -23,10 +23,114 @@ class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final phoneController = TextEditingController();
   bool isLoading = true;
   String? valueOrg;
   String name = '';
   String error = '';
+
+
+  Future<String> getSmsCodeFromUser() async {
+    String sms = '';
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+        return AlertDialog(
+          title: Text('Enter sms code'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(hintText: 'sms'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                //Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                sms = controller.text;
+                //Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+    return sms;
+  }
+
+  Future<bool> twofactor () async {
+    bool twoFactorFailed = false;
+    final user = FirebaseAuth.instance.currentUser!;
+    final session = await user.multiFactor.getSession();
+    final auth = FirebaseAuth.instance;
+    String completePhoneNum = '+1${phoneController.text.trim()}';
+    await auth.verifyPhoneNumber(
+      multiFactorSession: session,
+      phoneNumber: completePhoneNum,
+      verificationCompleted: (_) {},
+      verificationFailed: (_) {},
+      codeSent: (String verificationId, int? resendToken) async {
+        // See `firebase_auth` example app for a method of retrieving user's sms code:
+        // https://github.com/firebase/flutterfire/blob/main/packages/firebase_auth/firebase_auth/example/lib/auth.dart#L591
+        final smsCode = await getSmsCodeFromUser();
+
+        if (smsCode != "") {
+          // Create a PhoneAuthCredential with the code
+          final credential = PhoneAuthProvider.credential(
+            verificationId: verificationId,
+            smsCode: smsCode,
+          );
+
+          try {
+            await user.multiFactor.enroll(
+              PhoneMultiFactorGenerator.getAssertion(
+                credential,
+              ),
+            );
+          } on FirebaseAuthException catch (e) {
+            print(e.message);
+            twoFactorFailed = true;
+          }
+        }else{
+          twoFactorFailed = true;
+        }
+      },
+      codeAutoRetrievalTimeout: (_) {},
+    );
+    return twoFactorFailed;
+  }
+
+  Future<bool> sendSignInLinkToEmail() async{
+    var acs = ActionCodeSettings(
+      // URL you want to redirect back to. The domain (www.example.com) for this
+      // URL must be whitelisted in the Firebase Console.
+        url: 'rmhconnect-a5adb.firebaseapp.com',
+        // This must be true
+        handleCodeInApp: true,
+        iOSBundleId: 'com.example.ios',
+        androidPackageName: 'com.example.android',
+        // installIfNotAvailable
+        androidInstallApp: true,
+        // minimumVersion
+        androidMinimumVersion: '12');
+
+    var emailAuth = _emailController.text.trim();
+    bool emailAuthBool = false;
+    FirebaseAuth.instance.sendSignInLinkToEmail(
+        email: emailAuth, actionCodeSettings: acs)
+        .catchError((onError) {
+          emailAuthBool = false;
+        })
+        .then((value) {
+          emailAuthBool = true;
+        });
+    return emailAuthBool;
+  }
 
   @override
   void initState(){
@@ -113,6 +217,20 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(
+                        labelText: 'Phone'
+                    ),
+                    validator: (String? phone) {
+                      if (phone == null || phone.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      return null;
+                    },
+                    onChanged: (val) => setState(() => email = val)
+                ),
+                SizedBox(height: 20),
+                TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
                     labelText: 'Password'
@@ -140,6 +258,7 @@ class _SignupPageState extends State<SignupPage> {
                   },
                   onChanged: (val) => setState(() => password = val)
                 ),
+
                 SizedBox(
                   height: 35
                 ),
@@ -174,10 +293,26 @@ class _SignupPageState extends State<SignupPage> {
                             error = '';
                           });
                           try{
+                            if (! (await sendSignInLinkToEmail())){
+                              throw Exception;
+                            }
                             final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                               email: email,
                               password: password,
                             );
+
+                            //bool twoFactorFailed = await twofactor();
+                            // if(twoFactorFailed){
+                            //   User? user = FirebaseAuth.instance.currentUser;
+                            //   if (user != null) {
+                            //     try {
+                            //       await user.delete();
+                            //     }catch(e){
+                            //       print("Error: $e");
+                            //     }
+                            //   }
+                            //   return;
+                            // }
                             final roleDoc = await FirebaseFirestore.instance
                               .collection('admins')
                               .where('email', isEqualTo: email)
