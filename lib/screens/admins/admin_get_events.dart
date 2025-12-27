@@ -73,6 +73,7 @@ class AdminGetEvents extends StatelessWidget {
                   evdescrip: description,
                   evtime: _formatTime(dateTime),
                   evdate: _formatDate(dateTime),
+                  evtimeunchanged: dateTime,
                 );
               },
             );

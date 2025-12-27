@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rmhconnect/constants.dart';
 import 'package:rmhconnect/theme.dart';
 
@@ -12,8 +13,10 @@ class Events extends StatefulWidget {
   final String evtime;
   final String evdate;
   final String orgName;
+  final Timestamp evtimeunchanged;
 
   const Events({
+    
     super.key,
     required this.eventID,
     required this.orgName,
@@ -21,6 +24,7 @@ class Events extends StatefulWidget {
     required this.evdescrip,
     required this.evtime,
     required this.evdate,
+    required this.evtimeunchanged,
   });
 
   @override
@@ -29,6 +33,72 @@ class Events extends StatefulWidget {
 
 class _EventsState extends State<Events> {
   SampleItem? selectedItem;
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController namecontrol = TextEditingController();
+  late TextEditingController descripcontrol = TextEditingController();
+
+
+  late DateTime _selectedDate = DateTime.parse(widget.evdate);
+  late TimeOfDay _selectedTime;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _selectedDate = now;
+    _selectedTime = TimeOfDay(hour: now.hour, minute: now.minute);
+  }
+
+  Future<void> _createEvents(String orgName, String title, String description, DateTime date, TimeOfDay time) async {
+    try {
+      final orgQuery = await FirebaseFirestore.instance
+          .collection('organizations')
+          .where('name', isEqualTo: orgName)
+          .limit(1)
+          .get();
+
+      if (orgQuery.docs.isEmpty) {
+        throw Exception("Organization '$orgName' not found.");
+      }
+
+      final orgDocId = orgQuery.docs.first.id;
+
+      final combinedDateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+      final timestamp = Timestamp.fromDate(combinedDateTime);
+
+      final eventRef = await FirebaseFirestore.instance
+          .collection('organizations')
+          .doc(orgDocId)
+          .collection('activities')
+          .doc(widget.eventID)
+          .update({
+        'title': namecontrol.text.trim(),
+        'description': descripcontrol.text.trim(),
+        'dateTime': _selectedDate,
+      });
+      //await eventRef.update({'id': eventRef.id});
+      print("Activity added successfully.");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Activity added successfully.")
+          )
+      );
+    } catch (e) {
+      print("Failed to add activity: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Failed to add activity.")
+          )
+      );
+    }
+  }
+
 
   Future<void> deleteEventByUid(String orgName, String uid) async {
     try {
@@ -127,6 +197,151 @@ class _EventsState extends State<Events> {
                   }
                   if (item == SampleItem.itemTwo) {
 
+                  }
+                  if (item == SampleItem.itemOne) {
+                    descripcontrol.text = widget.evdescrip;
+                    namecontrol.text = widget.evname;
+                    showDialog(
+                      builder: (context) => StatefulBuilder(
+                        builder: (BuildContext context, void Function(void Function()) setDialogState) {
+                          return AlertDialog(
+                            title: Text("Edit Event"),
+                            content: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextFormField(
+                                    controller: namecontrol,
+                                    decoration: InputDecoration(
+                                      labelText: "Edit Event Name",
+                                    ),
+                                    validator: (String? eventnamevalue){
+                                      if (eventnamevalue == null || eventnamevalue.isEmpty) {
+                                        return 'Please enter a screen name';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextButton.icon(
+                                          onPressed: () async {
+                                            DateTime mindate = DateTime.now();
+                                            DateTime maxdate = DateTime.now().add(Duration(days:365));
+                                            DateTime initial = _selectedDate;
+                                            if(initial.isBefore(mindate)){
+                                              initial = mindate;
+                                            }
+                                            else if(initial.isAfter(maxdate)){
+                                              initial = maxdate;
+                                            }
+
+                                            final picked = await showDatePicker(
+                                              context: context,
+                                              initialDate: initial,
+                                              firstDate: mindate,
+                                              lastDate: maxdate,
+                                            );
+                                            if (picked != null) {
+                                              setState(() {
+                                                _selectedDate = picked;
+                                              });
+                                              setDialogState(() {});
+                                            }
+                                          },
+                                          icon: Icon(Icons.calendar_today),
+                                          label: Text(
+                                            DateFormat('MMM d, yyyy').format(_selectedDate),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: TextButton.icon(
+                                          onPressed: () async {
+                                            final picked = await showTimePicker(
+                                              context: context,
+                                              initialTime: _selectedTime,
+                                            );
+                                            if (picked != null) {
+                                              setState(() {
+                                                _selectedTime = picked;
+                                              });
+                                              setDialogState(() {}); // Force dialog to rebuild
+                                            }
+                                          },
+                                          icon: Icon(Icons.access_time),
+                                          label: Text(_selectedTime.format(context)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  TextFormField(
+                                      controller: descripcontrol,
+                                      decoration: InputDecoration(
+                                        labelText: "Edit Event Description",
+                                      ),
+                                      validator: (String? eventdescripvalue) {
+                                        if (eventdescripvalue == null ||
+                                            eventdescripvalue.isEmpty) {
+                                          return 'Please enter a screen name';
+                                        }
+                                        return null;
+                                      }
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Spacer(),
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          namecontrol.clear();
+                                          descripcontrol.clear();
+                                        },
+                                        child: Text("Cancel"),
+                                      ),
+                                      SizedBox(width: 20),
+                                      OutlinedButton(
+                                        onPressed: () async {
+                                          if(_formKey.currentState!.validate()) {
+                                            setState(() {
+                                              nbname = namecontrol.text;
+                                              nbloc = descripcontrol.text;
+                                              //namecontrol.clear();
+
+                                            });
+                                            await _createEvents(widget.orgName, nbname, nbloc,
+                                               _selectedDate, _selectedTime);
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              namecontrol.clear();
+                                              descripcontrol.clear();
+                                            });
+                                          }
+                                          else{
+                                            print("error");
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                    content: Text("Error")
+                                                )
+                                            );
+                                          }
+                                        },
+                                        child: Text("Create"),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ), context: context,
+                    );
                   }
                 },
                 itemBuilder: (BuildContext context) =>
